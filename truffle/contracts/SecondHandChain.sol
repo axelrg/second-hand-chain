@@ -17,7 +17,7 @@ pragma solidity >=0.4.22 <0.9.0;
   let instance = await ERC721.deployed()
   instance._createPhone("iphone 10","werwe3","apple","green",3000,1900,8,90,{from: accounts[3]})
   instance.ownerOf(0)
-  instance.putPhoneOnSale(10000000000000000000,0)
+  instance.putPhoneOnSale('10000000000000000000',0)
   let actualBalance0 = await web3.eth.getBalance(accounts[0]);
   let actualBalance1 = await web3.eth.getBalance(accounts[1]);
   truffle migrate --reset
