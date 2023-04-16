@@ -9,8 +9,25 @@ pragma solidity >=0.4.22 <0.9.0;
   truffle compile
   truffle migrate
   SecondHandChain.deployed().then(function(instance) {contr=instance;});
-  contr._createPhone("iphone 10","werwe3","apple","green",3000,1900,true,8,90);
+  contr._createPhone("iphone 10","werwe3","apple","green",3000,1900,8,90);
   contr.getAllPhonesInAddress('0xcb32167472db9f1ee15b51c4a6fb2815a1f3a7e7');
+
+
+
+  let instance = await ERC721.deployed()
+  instance._createPhone("iphone 10","werwe3","apple","green",3000,1900,8,90,{from: accounts[3]})
+  instance.ownerOf(0)
+  instance.putPhoneOnSale(10000000000000000000,0)
+  let actualBalance0 = await web3.eth.getBalance(accounts[0]);
+  let actualBalance1 = await web3.eth.getBalance(accounts[1]);
+  truffle migrate --reset
+  instance.safeTransferFrom('0xf99C16ed15DE5e7A30C8460ae1e81B28fDf47797','0xb62a4ee782019cDd813Ff320818C1fbECfBE8a8a',0, {from: '0xb62a4ee782019cDd813Ff320818C1fbECfBE8a8a', value: 100000000000000000})
+  instance.putPhoneOnSale(2,0,{from: '0xf99C16ed15DE5e7A30C8460ae1e81B28fDf47797'})
+  instance.safeTransferFrom(accounts[0],accounts[3],0, {from: accounts[3], value: 9})
+
+  truffle console
+  instance.safeTransferFrom(accounts[2],accounts[4],0, {from: accounts[4], value: 10000000000000000000})
+  instance.putPhoneOnSale('10000000000000000000',0, {from:accounts[2]})
 
 */
 
@@ -34,6 +51,8 @@ contract SecondHandChain {
   mapping (string => uint) imeiPhoneId;
   mapping (string => bool) isImeiRegistered;
   mapping (uint => bool) isPhoneOnSale;
+  mapping (uint => address) phoneApproval;
+  mapping (address => address) approvalForAll;
 
   function getPhones() public view returns( Phone[] memory){
     return phones;
@@ -67,11 +86,13 @@ contract SecondHandChain {
     require(phoneOwner[_phoneId]==msg.sender, "You do not own that phoneId");
     isPhoneOnSale[_phoneId]=true;
     phones[_phoneId].price=_price;
+    phoneApproval[_phoneId] = address(this);
   }
 
   function removePhoneFromSale(uint _phoneId) external {
     require(phoneOwner[_phoneId]==msg.sender, "You do not own that phoneId");
     isPhoneOnSale[_phoneId]=false;
+    phoneApproval[_phoneId] = address(0);
   }
 
   function _createPhone(
@@ -81,7 +102,6 @@ contract SecondHandChain {
     string memory _colour,
     uint _price,
     uint _salePrice,
-    bool _isOnSale,
     uint16 _ram,
     uint32 _mem 
     ) public {
@@ -106,8 +126,7 @@ contract SecondHandChain {
 
     phoneOwner[id]=msg.sender;
     imeiPhoneId[_imei]=id;
-    isPhoneOnSale[id] = _isOnSale;
+    isPhoneOnSale[id] = false;
     isImeiRegistered[_imei]=true;
   }
-
 }
