@@ -35,7 +35,22 @@ contract ERC721 is IERC721, SecondHandChain {
         phones[_phoneId].salePrice.push(phones[_phoneId].price);
         isPhoneOnSale[_phoneId] = false;
         phoneApproval[_phoneId] = address(0);
-    } 
+    }
+
+    function safeTransferFrom(address _from, address _to, uint256 _tokenId, bytes memory data) external payable{
+        _validationPreTransfer(_from, _to, _tokenId);
+
+        require(msg.value >= phones[_tokenId].price, "No payment no token");
+
+        if (msg.value > phones[_tokenId].price){
+            payable(msg.sender).transfer(msg.value - phones[_tokenId].price);
+        }
+
+        payable(phoneOwner[_tokenId]).transfer(phones[_tokenId].price);
+    
+        _transfer(_from, _to, _tokenId);
+        emit Transfer(_from, _to, _tokenId);
+    }
 
     function safeTransferFrom(address _from, address _to, uint256 _tokenId) external payable{
         _validationPreTransfer(_from, _to, _tokenId);
@@ -62,7 +77,7 @@ contract ERC721 is IERC721, SecondHandChain {
 
         payable(phoneOwner[_tokenId]).transfer(phones[_tokenId].price);
         _transfer(_from, _to, _tokenId);
-        emit Transfer(_from, _to, _tokenId); 
+        emit Transfer(_from, _to, _tokenId);
     }
 
     function approve(address _approved, uint256 _tokenId) external payable {
