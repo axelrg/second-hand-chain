@@ -15,7 +15,7 @@ pragma solidity >=0.4.22 <0.9.0;
 
 
   let instance = await ERC721.deployed()
-  instance._createPhone("iphone 10","werwe3","apple","green",3000,1900,8,90,{from: accounts[3]})
+  instance.createPhone("iphone 10","werwe3","apple","green",3000,1900,8,90,{from: accounts[3]})
   instance.ownerOf(0)
   instance.putPhoneOnSale('10000000000000000000',0)
   let actualBalance0 = await web3.eth.getBalance(accounts[0]);
@@ -34,6 +34,7 @@ pragma solidity >=0.4.22 <0.9.0;
 contract SecondHandChain {
 
   struct Phone {
+    uint256 id;
     string model;
     string brand;
     string colour;
@@ -46,6 +47,8 @@ contract SecondHandChain {
   }
 
   Phone[] public phones;
+  uint256 numberOfPhonesOnSale;
+
   mapping (uint => address) phoneOwner;
   mapping (address => uint) phonesPerOwner;
   mapping (string => uint) imeiPhoneId;
@@ -66,17 +69,31 @@ contract SecondHandChain {
     return isImeiRegistered[_imei];
   }
 
-  function getAllPhonesInAddress(address _address) external view returns(uint[] memory){
-    uint[] memory _phonesIds = new uint[](phonesPerOwner[_address]) ;
+  function getAllPhonesInAddress(address _address) external view returns(Phone[] memory){
+    Phone[] memory _phones = new Phone[](phonesPerOwner[_address]) ;
     uint j=0;
     for (uint256 i= 0; i < phones.length; i++) {
       if (phoneOwner[i]==_address) {
-        _phonesIds[j]=i;
+        _phones[j]=phones[i];
        j++;
       }
     }
-    return _phonesIds;
+    return _phones;
   }
+
+  function getAllPhonesOnSale() external view returns(Phone[] memory){
+    Phone[] memory _phones = new Phone[](numberOfPhonesOnSale) ;
+    uint j=0;
+    for (uint256 i= 0; i < phones.length; i++) {
+      if (isPhoneOnSale[i]) {
+        _phones[j]=phones[i];
+       j++;
+      }
+    }
+    return _phones;
+  }
+
+
 
   function getIsPhoneOnSale(uint _id) external view returns(bool){
     return isPhoneOnSale[_id];
@@ -87,15 +104,17 @@ contract SecondHandChain {
     isPhoneOnSale[_phoneId]=true;
     phones[_phoneId].price=_price;
     phoneApproval[_phoneId] = address(this);
+    numberOfPhonesOnSale++;
   }
 
   function removePhoneFromSale(uint _phoneId) external {
     require(phoneOwner[_phoneId]==msg.sender, "You do not own that phoneId");
     isPhoneOnSale[_phoneId]=false;
     phoneApproval[_phoneId] = address(0);
+    numberOfPhonesOnSale--;
   }
 
-  function _createPhone(
+  function createPhone(
     string memory _model,
     string memory _imei,
     string memory _brand,
@@ -120,6 +139,7 @@ contract SecondHandChain {
     phones.push(phone);
     phonesPerOwner[msg.sender]++;
     uint id = phones.length-1;
+    phones[id].id=id;
     phones[id].owners.push(msg.sender);
     phones[id].saleTime.push(block.timestamp);
     phones[id].salePrice.push(_price);

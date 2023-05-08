@@ -34,6 +34,7 @@ contract ERC721 is IERC721, SecondHandChain {
         phones[_phoneId].saleTime.push(block.timestamp);
         phones[_phoneId].salePrice.push(phones[_phoneId].price);
         isPhoneOnSale[_phoneId] = false;
+        numberOfPhonesOnSale--;
         phoneApproval[_phoneId] = address(0);
     }
 
