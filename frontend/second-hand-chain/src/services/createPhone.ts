@@ -7,72 +7,83 @@ import SecondHandChainCompiled from "../../../../truffle/build/contracts/SecondH
 const abi = SecondHandChainCompiled;
 
 
-const contractAddressSHC: string = "0x2751ba6CA233db6bb12D57311D49621Ee76bA55b";
+const contractAddressSHC: string = "0x360c612eb72bC04c1b7EE64E5e481bc6B4D80759";
 let selectedAccount: string;
 var web3: Web3 = new Web3(
     "https://eth-sepolia.g.alchemy.com/v2/MGfg5dJiVVHJmYuN_lcjYLa5snWbIyDz"
   );
 
-const createPhone = () => {
+
+  interface Phone{
+    model :string
+    brand :string
+    imei : string
+    colour :string
+    ram : string
+    mem: string
+    salePrice : string
+    price : string
+}
+
+
+const createPhone = async (phone: Phone) => {
    let provider = window.ethereum;
 
-   if (typeof provider !== 'undefined'){
+   const contract: Contract = new web3.eth.Contract(
+    abi.abi as AbiItem[],
+    contractAddressSHC
+  );
+
+  
 
         const fetchWallet = async () => {
             try {
+                if (typeof provider !== 'undefined'){
                 var accounts : string[] = await provider.request({method:'eth_requestAccounts'})
                 console.log(accounts)
                 selectedAccount=accounts[0]
                 const balance : string = await web3.eth.getBalance(accounts[0])
                 console.log(balance)
-                const contract: Contract = new web3.eth.Contract(
-                    abi.abi as AbiItem[],
-                    contractAddressSHC
-                  );  
-                
-                const tx = {
-                    from: selectedAccount,
-                    to: contractAddressSHC,
-                    
-                    'data': contract.methods._createPhone(
-                          "iPhone 9",
-                          "aaaaaaaaabbbcccg",
-                          "Apple",
-                          "Red",
-                          560000,
-                          5600000,
-                          8,
-                          128 
-                        ).encodeABI()
                 }
 
-                const txHash = await window.ethereum.request({
-                    method: 'eth_sendTransaction',
-                    params: [tx]
-                })
-
+                const fetchHash = async () => {
+                    const tx = {
+                        from: selectedAccount,
+                        to: contractAddressSHC,
+                        
+                        'data': contract.methods.createPhone(
+                              phone.model,
+                              phone.imei,
+                              phone.brand,
+                              phone.colour,
+                              phone.price,
+                              phone.salePrice,
+                              phone.ram,
+                              phone.mem
+                            ).encodeABI()
+                    }
                 
-            
+                        try {
+                            var response : string = await window.ethereum.request({
+                                method: 'eth_sendTransaction',
+                                params: [tx]
+                            })
+                            return response
+                        } catch (error) {
+                            console.log(error);
+                        }
+                    }
+                   
+                    return await fetchHash()
+                    
             } catch (error) {
                 console.log(error)
             }
         };
     
-    fetchWallet();
 
-    
+    return await fetchWallet();
 
-
-
-    
-
-    //provider.request({method:'eth_requestAccounts'}).then( accounts  =>{
-    //    console.log(accounts)
-    //}).catch(err => {
-    //    console.log(err)
-    //})
-   }
-    
 }
 
 export default createPhone

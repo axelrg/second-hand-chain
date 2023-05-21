@@ -5,7 +5,7 @@ import { AbiItem } from "web3-utils";
 const abi = SecondHandChainCompiled;
 
 import SecondHandChainCompiled from "../../../../truffle/build/contracts/SecondHandChain.json";
-const contractAddressSHC: string = "0x2751ba6CA233db6bb12D57311D49621Ee76bA55b";
+const contractAddressSHC: string = "0x360c612eb72bC04c1b7EE64E5e481bc6B4D80759";
 
 var web3: Web3 = new Web3(
     "https://eth-sepolia.g.alchemy.com/v2/MGfg5dJiVVHJmYuN_lcjYLa5snWbIyDz"

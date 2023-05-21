@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
-
 /*
   truffle migrate --network development
   truffle develop
@@ -32,121 +31,124 @@ pragma solidity >=0.4.22 <0.9.0;
 */
 
 contract SecondHandChain {
-
-  struct Phone {
-    uint256 id;
-    string model;
-    string brand;
-    string colour;
-    uint16 ram;
-    uint32 mem;
-    address[] owners;
-    uint[] saleTime;
-    uint[] salePrice;
-    uint price;
-  }
-
-  Phone[] public phones;
-  uint256 numberOfPhonesOnSale;
-
-  mapping (uint => address) phoneOwner;
-  mapping (address => uint) phonesPerOwner;
-  mapping (string => uint) imeiPhoneId;
-  mapping (string => bool) isImeiRegistered;
-  mapping (uint => bool) isPhoneOnSale;
-  mapping (uint => address) phoneApproval;
-  mapping (address => address) approvalForAll;
-
-  function getPhones() public view returns( Phone[] memory){
-    return phones;
-  }
-
-  function getPhoneOwner(uint _id) public view returns(address){
-    return phoneOwner[_id];
-  }
-
-  function imeiRegistered(string memory _imei) private view returns(bool){
-    return isImeiRegistered[_imei];
-  }
-
-  function getAllPhonesInAddress(address _address) external view returns(Phone[] memory){
-    Phone[] memory _phones = new Phone[](phonesPerOwner[_address]) ;
-    uint j=0;
-    for (uint256 i= 0; i < phones.length; i++) {
-      if (phoneOwner[i]==_address) {
-        _phones[j]=phones[i];
-       j++;
-      }
+    struct Phone {
+        uint256 id;
+        string model;
+        string brand;
+        string colour;
+        uint16 ram;
+        uint32 mem;
+        address[] owners;
+        uint[] saleTime;
+        uint[] salePrice;
+        uint price;
     }
-    return _phones;
-  }
 
-  function getAllPhonesOnSale() external view returns(Phone[] memory){
-    Phone[] memory _phones = new Phone[](numberOfPhonesOnSale) ;
-    uint j=0;
-    for (uint256 i= 0; i < phones.length; i++) {
-      if (isPhoneOnSale[i]) {
-        _phones[j]=phones[i];
-       j++;
-      }
+    Phone[] public phones;
+    uint256 numberOfPhonesOnSale;
+
+    mapping(uint => address) phoneOwner;
+    mapping(address => uint) phonesPerOwner;
+    mapping(string => uint) imeiPhoneId;
+    mapping(string => bool) isImeiRegistered;
+    mapping(uint => bool) isPhoneOnSale;
+    mapping(uint => address) phoneApproval;
+    mapping(address => address) approvalForAll;
+
+    function getPhones() public view returns (Phone[] memory) {
+        return phones;
     }
-    return _phones;
-  }
 
+    function getPhoneOwner(uint _id) public view returns (address) {
+        return phoneOwner[_id];
+    }
 
+    function imeiRegistered(string memory _imei) public view returns (bool) {
+        return isImeiRegistered[_imei];
+    }
 
-  function getIsPhoneOnSale(uint _id) external view returns(bool){
-    return isPhoneOnSale[_id];
-  }
+    function getAllPhonesInAddress(
+        address _address
+    ) external view returns (Phone[] memory) {
+        Phone[] memory _phones = new Phone[](phonesPerOwner[_address]);
+        uint j = 0;
+        for (uint256 i = 0; i < phones.length; i++) {
+            if (phoneOwner[i] == _address) {
+                _phones[j] = phones[i];
+                j++;
+            }
+        }
+        return _phones;
+    }
 
-  function putPhoneOnSale(uint _price, uint _phoneId) external {
-    require(phoneOwner[_phoneId]==msg.sender, "You do not own that phoneId");
-    isPhoneOnSale[_phoneId]=true;
-    phones[_phoneId].price=_price;
-    phoneApproval[_phoneId] = address(this);
-    numberOfPhonesOnSale++;
-  }
+    function getAllPhonesOnSale() external view returns (Phone[] memory) {
+        Phone[] memory _phones = new Phone[](numberOfPhonesOnSale);
+        uint j = 0;
+        for (uint256 i = 0; i < phones.length; i++) {
+            if (isPhoneOnSale[i]) {
+                _phones[j] = phones[i];
+                j++;
+            }
+        }
+        return _phones;
+    }
 
-  function removePhoneFromSale(uint _phoneId) external {
-    require(phoneOwner[_phoneId]==msg.sender, "You do not own that phoneId");
-    isPhoneOnSale[_phoneId]=false;
-    phoneApproval[_phoneId] = address(0);
-    numberOfPhonesOnSale--;
-  }
+    function getIsPhoneOnSale(uint _id) external view returns (bool) {
+        return isPhoneOnSale[_id];
+    }
 
-  function createPhone(
-    string memory _model,
-    string memory _imei,
-    string memory _brand,
-    string memory _colour,
-    uint _price,
-    uint _salePrice,
-    uint16 _ram,
-    uint32 _mem 
+    function putPhoneOnSale(uint _price, uint _phoneId) external {
+        require(
+            phoneOwner[_phoneId] == msg.sender,
+            "You do not own that phoneId"
+        );
+        isPhoneOnSale[_phoneId] = true;
+        phones[_phoneId].price = _price;
+        phoneApproval[_phoneId] = address(this);
+        numberOfPhonesOnSale++;
+    }
+
+    function removePhoneFromSale(uint _phoneId) external {
+        require(
+            phoneOwner[_phoneId] == msg.sender,
+            "You do not own that phoneId"
+        );
+        isPhoneOnSale[_phoneId] = false;
+        phoneApproval[_phoneId] = address(0);
+        numberOfPhonesOnSale--;
+    }
+
+    function createPhone(
+        string memory _model,
+        string memory _imei,
+        string memory _brand,
+        string memory _colour,
+        uint _price,
+        uint _salePrice,
+        uint16 _ram,
+        uint32 _mem
     ) public {
+        require(isImeiRegistered[_imei] == false, "IMEI already exists");
 
-    require(isImeiRegistered[_imei]==false, "IMEI already exists");
+        Phone memory phone;
+        phone.model = _model;
+        phone.brand = _brand;
+        phone.colour = _colour;
+        phone.ram = _ram;
+        phone.mem = _mem;
+        phone.price = _salePrice;
 
-    Phone memory phone;
-    phone.model = _model;
-    phone.brand = _brand;
-    phone.colour = _colour;
-    phone.ram = _ram;
-    phone.mem = _mem;
-    phone.price = _salePrice;
+        phones.push(phone);
+        phonesPerOwner[msg.sender]++;
+        uint id = phones.length - 1;
+        phones[id].id = id;
+        phones[id].owners.push(msg.sender);
+        phones[id].saleTime.push(block.timestamp);
+        phones[id].salePrice.push(_price);
 
-
-    phones.push(phone);
-    phonesPerOwner[msg.sender]++;
-    uint id = phones.length-1;
-    phones[id].id=id;
-    phones[id].owners.push(msg.sender);
-    phones[id].saleTime.push(block.timestamp);
-    phones[id].salePrice.push(_price);
-
-    phoneOwner[id]=msg.sender;
-    imeiPhoneId[_imei]=id;
-    isPhoneOnSale[id] = false;
-    isImeiRegistered[_imei]=true;
-  }
+        phoneOwner[id] = msg.sender;
+        imeiPhoneId[_imei] = id;
+        isPhoneOnSale[id] = false;
+        isImeiRegistered[_imei] = true;
+    }
 }
