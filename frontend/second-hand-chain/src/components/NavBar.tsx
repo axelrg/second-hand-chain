@@ -3,7 +3,11 @@ import connectWallet from "../services/connectWallet";
 import { WalletButton } from "./WalletButton";
 import MintPhoneModal from "./MintPhoneModal";
 
-export const NavBar = () => {
+interface Props {
+  changeFetchedPhones : (e: React.MouseEvent, title: string) => void
+}
+
+export const NavBar = ({ changeFetchedPhones }: Props) => {
   const [modalMintVisible, setMintVisibility] = useState<boolean>(false);
   return (
     <>
@@ -31,7 +35,14 @@ export const NavBar = () => {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a>Your Phones</a>
+                <a onClick={(e) => changeFetchedPhones(e,"ownedPhones")}>
+                  Your Phones
+                </a>
+              </li>
+              <li>
+                <a onClick={(e) => changeFetchedPhones(e,"phonesOnSale")}>
+                  Phones On Sale
+                </a>
               </li>
               <li>
                 <a onClick={() => setMintVisibility(true)}>Create Phone</a>
@@ -45,33 +56,17 @@ export const NavBar = () => {
             <li>
               <a onClick={() => setMintVisibility(true)}>Create Phone</a>
             </li>
-            <li tabIndex={0}>
-              <a>
-                Parent
-                <svg
-                  className="fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                </svg>
-              </a>
-              <ul className="p-2">
-                <li>
-                  <a>Submenu 1</a>
-                </li>
-                <li>
-                  <a>Submenu 2</a>
-                </li>
-              </ul>
+            <li>
+              <a onClick={(e) => changeFetchedPhones(e,"ownedPhones")}>Your Phones</a>
             </li>
             <li>
-              <a>Item 3</a>
+              <a onClick={(e) => changeFetchedPhones(e,"phonesOnSale")}>
+                Phones On Sale
+              </a>
             </li>
           </ul>
         </div>
+        
         <div className="navbar-end">
           <WalletButton></WalletButton>
         </div>
