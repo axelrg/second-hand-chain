@@ -18,7 +18,7 @@ interface Phone{
     ram : BigInteger
     mem: BigInteger
     owners : string[]
-    saletime : BigInteger[]
+    saleTime : BigInteger[]
     salePrice : BigInteger[]
     price : BigInteger
 }

@@ -1,3 +1,6 @@
+import { useState } from "react";
+import { PhoneDetailsModal } from "./PhoneDetailsModal";
+
 interface Props {
   phone: Phone;
 }
@@ -9,12 +12,14 @@ interface Phone {
   ram: BigInteger;
   mem: BigInteger;
   owners: string[];
-  saletime: BigInteger[];
+  saleTime: BigInteger[];
   salePrice: BigInteger[];
   price: BigInteger;
 }
 
 export const Card = ({ phone }: Props) => {
+  const [modalPhoneCardVisible, setmodalPhoneCardVisibility] =
+    useState<boolean>(false);
   return (
     <>
       <div>
@@ -31,11 +36,23 @@ export const Card = ({ phone }: Props) => {
             <p>{phone.price}</p>
 
             <div className="card-actions justify-end">
-              <button className="btn btn-primary">Buy Now</button>
+              <button
+                className="btn btn-primary"
+                onClick={() => setmodalPhoneCardVisibility(true)}
+              >
+                Buy Now
+              </button>
             </div>
           </div>
         </div>
       </div>
+      {modalPhoneCardVisible && (
+        <PhoneDetailsModal
+          phone={phone}
+          visible={modalPhoneCardVisible}
+          onHide={() => setmodalPhoneCardVisibility(false)}
+        />
+      )}
     </>
   );
 };

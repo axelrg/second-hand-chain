@@ -12,13 +12,14 @@ interface Phone {
   ram: BigInteger;
   mem: BigInteger;
   owners: string[];
-  saletime: BigInteger[];
+  saleTime: BigInteger[];
   salePrice: BigInteger[];
   price: BigInteger;
 }
 
 const App = () => {
   const [fetchPhones, setFetchPhones] = useState<string>("ownedPhones");
+  
 
   const changeFetchedPhones = (e: React.MouseEvent, title: string) => {
     console.log(fetchPhones);
@@ -27,7 +28,7 @@ const App = () => {
 
   var usephones = useOwnedPhones();
 
-  var phones = useOnSalePhones();
+  var  phones : Phone[]= useOnSalePhones();
 
   return (
     <>

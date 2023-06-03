@@ -4,7 +4,7 @@ import { WalletButton } from "./WalletButton";
 import MintPhoneModal from "./MintPhoneModal";
 
 interface Props {
-  changeFetchedPhones : (e: React.MouseEvent, title: string) => void
+  changeFetchedPhones: (e: React.MouseEvent, title: string) => void;
 }
 
 export const NavBar = ({ changeFetchedPhones }: Props) => {
@@ -35,12 +35,12 @@ export const NavBar = ({ changeFetchedPhones }: Props) => {
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a onClick={(e) => changeFetchedPhones(e,"ownedPhones")}>
+                <a onClick={(e) => changeFetchedPhones(e, "ownedPhones")}>
                   Your Phones
                 </a>
               </li>
               <li>
-                <a onClick={(e) => changeFetchedPhones(e,"phonesOnSale")}>
+                <a onClick={(e) => changeFetchedPhones(e, "phonesOnSale")}>
                   Phones On Sale
                 </a>
               </li>
@@ -57,16 +57,18 @@ export const NavBar = ({ changeFetchedPhones }: Props) => {
               <a onClick={() => setMintVisibility(true)}>Create Phone</a>
             </li>
             <li>
-              <a onClick={(e) => changeFetchedPhones(e,"ownedPhones")}>Your Phones</a>
+              <a onClick={(e) => changeFetchedPhones(e, "ownedPhones")}>
+                Your Phones
+              </a>
             </li>
             <li>
-              <a onClick={(e) => changeFetchedPhones(e,"phonesOnSale")}>
+              <a onClick={(e) => changeFetchedPhones(e, "phonesOnSale")}>
                 Phones On Sale
               </a>
             </li>
           </ul>
         </div>
-        
+
         <div className="navbar-end">
           <WalletButton></WalletButton>
         </div>
