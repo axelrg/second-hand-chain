@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import Alert from "./Alert";
 import createPhone from "../services/createPhone";
 import isImeiRegistered from "../services/isImeiRegistered";

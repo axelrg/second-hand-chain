@@ -1,4 +1,9 @@
+import { useState } from "react";
+import isPhoneOnSale from "../services/isPhoneOnSale";
+import { PutOnSale } from "./PutOnSale";
+
 interface Phone {
+  id:Number
   model: string;
   brand: string;
   colour: string;
@@ -14,9 +19,11 @@ interface Props {
   phone: Phone;
   visible: boolean;
   onHide: () => void;
+  isOwned: boolean
 }
 
-export const PhoneDetailsModal = ({ phone, visible, onHide }: Props) => {
+export const PhoneDetailsModal = ({ phone, visible, onHide, isOwned }: Props) => {
+
   var table = [];
 
   for (let i = 0; i < phone.owners.length; i++) {
@@ -29,6 +36,7 @@ export const PhoneDetailsModal = ({ phone, visible, onHide }: Props) => {
       price: phone.salePrice[i],
       time: timeFormatted.toLocaleDateString(),
     });
+
   }
 
   return (
@@ -57,7 +65,6 @@ export const PhoneDetailsModal = ({ phone, visible, onHide }: Props) => {
 
           <div className="overflow-x-auto">
             <table className="table table-xs">
-              {/* head */}
               <thead>
                 <tr>
                   <td>Index</td>
@@ -78,6 +85,8 @@ export const PhoneDetailsModal = ({ phone, visible, onHide }: Props) => {
               </tbody>
             </table>
           </div>
+
+          <PutOnSale id={phone.id}></PutOnSale>
         </label>
       </label>
     </>

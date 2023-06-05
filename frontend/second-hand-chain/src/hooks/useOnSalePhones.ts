@@ -12,6 +12,7 @@ var web3: Web3 = new Web3(
   );
 
 interface Phone{
+    id : Number
     model :string
     brand :string
     colour :string

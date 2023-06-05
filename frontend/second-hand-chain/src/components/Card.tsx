@@ -3,9 +3,11 @@ import { PhoneDetailsModal } from "./PhoneDetailsModal";
 
 interface Props {
   phone: Phone;
+  isOwned: boolean;
 }
 
 interface Phone {
+  id:Number
   model: string;
   brand: string;
   colour: string;
@@ -17,7 +19,7 @@ interface Phone {
   price: BigInteger;
 }
 
-export const Card = ({ phone }: Props) => {
+export const Card = ({ phone, isOwned }: Props) => {
   const [modalPhoneCardVisible, setmodalPhoneCardVisibility] =
     useState<boolean>(false);
   return (
@@ -48,6 +50,7 @@ export const Card = ({ phone }: Props) => {
       </div>
       {modalPhoneCardVisible && (
         <PhoneDetailsModal
+          isOwned={isOwned}
           phone={phone}
           visible={modalPhoneCardVisible}
           onHide={() => setmodalPhoneCardVisibility(false)}

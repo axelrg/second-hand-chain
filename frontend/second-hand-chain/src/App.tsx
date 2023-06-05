@@ -6,6 +6,7 @@ import useOnSalePhones from "./hooks/useOnSalePhones";
 import useOwnedPhones from "./hooks/useOwnedPhones";
 
 interface Phone {
+  id: Number
   model: string;
   brand: string;
   colour: string;
@@ -26,7 +27,7 @@ const App = () => {
     setFetchPhones(title);
   };
 
-  var usephones = useOwnedPhones();
+  var usephones : Phone[] = useOwnedPhones();
 
   var  phones : Phone[]= useOnSalePhones();
 
@@ -41,13 +42,13 @@ const App = () => {
           {fetchPhones == "ownedPhones" &&
             usephones.map((phone, index) => (
               <li>
-                <Card phone={phone}></Card>
+                <Card phone={phone} isOwned={true}></Card>
               </li>
             ))}
           {fetchPhones == "phonesOnSale" &&
             phones.map((phone, index) => (
               <li>
-                <Card phone={phone}></Card>
+                <Card phone={phone} isOwned={false}></Card>
               </li>
             ))}
         </ul>
