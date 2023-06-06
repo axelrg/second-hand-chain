@@ -1,12 +1,9 @@
 import Web3 from "web3";
 import Contract from "web3-eth-contract";
 import { AbiItem } from "web3-utils";
-import SecondHandChainCompiled from "../../../../truffle/build/contracts/SecondHandChain.json";
-
+import SecondHandChainCompiled from "../../../../truffle/build/contracts/ERC721.json";
+const contractAddressSHC: string = "0xc725DDDfE7a82865DdbE3c1ee66b26c9a0252237";
 const abi = SecondHandChainCompiled;
-
-
-const contractAddressSHC: string = "0x360c612eb72bC04c1b7EE64E5e481bc6B4D80759";
 let selectedAccount: string;
 var web3: Web3 = new Web3(
     "https://eth-sepolia.g.alchemy.com/v2/MGfg5dJiVVHJmYuN_lcjYLa5snWbIyDz"

@@ -3,12 +3,14 @@ import isPhoneOnSale from "../services/isPhoneOnSale";
 import putPhoneOnSale from "../services/putPhoneOnSale";
 import Alert from "./Alert";
 import removePhoneFromSale from "../services/removePhoneFromSale";
+import buyPhone from "../services/buyPhone";
 
 interface Props {
   id: Number;
+  isOwned: boolean;
 }
 
-export const PutOnSale = ({ id }: Props) => {
+export const PutOnSale = ({ id, isOwned }: Props) => {
   const [isOnSale, setIsOnSale] = useState(false);
   const [errors, setErrors] = useState("");
   const [visibleErrors, setVisibleErrors] = useState(false);
@@ -47,9 +49,7 @@ export const PutOnSale = ({ id }: Props) => {
         setTypeAlert("alert-success");
       }
     });
-  }
-
-  
+  };
 
   return (
     <>
@@ -60,7 +60,7 @@ export const PutOnSale = ({ id }: Props) => {
           onHide={() => setVisibleErrors(false)}
         ></Alert>
       )}
-      {isOnSale && (
+      {isOwned && isOnSale && (
         <>
           <br />
           <h4 className="link-success">Is on sale</h4>
@@ -75,7 +75,6 @@ export const PutOnSale = ({ id }: Props) => {
               />
               <br />
               <input
-                
                 type="submit"
                 value="Change price"
                 className="btn btn-success"
@@ -83,11 +82,13 @@ export const PutOnSale = ({ id }: Props) => {
               <br />
             </div>
           </form>
-          <button className="btn btn-error" onClick={() => remove()}>Remove from sale</button>
+          <button className="btn btn-error" onClick={() => remove()}>
+            Remove from sale
+          </button>
           <br />
         </>
       )}
-      {isOnSale == false && (
+      {isOwned && isOnSale == false && (
         <>
           <br />
           <h4 className=" link-error">IS not on sale</h4>
@@ -111,6 +112,10 @@ export const PutOnSale = ({ id }: Props) => {
           </form>
         </>
       )}
+
+      {isOwned==false && isOnSale && <><button className="btn btn-success" onClick={()=>buyPhone(id)}>
+            Buy Phone
+          </button></>}
     </>
   );
 };

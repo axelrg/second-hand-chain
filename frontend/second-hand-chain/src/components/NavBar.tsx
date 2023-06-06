@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import connectWallet from "../services/connectWallet";
 import { WalletButton } from "./WalletButton";
 import MintPhoneModal from "./MintPhoneModal";
 

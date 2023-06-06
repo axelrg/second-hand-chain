@@ -1,5 +1,3 @@
-import { useState } from "react";
-import isPhoneOnSale from "../services/isPhoneOnSale";
 import { PutOnSale } from "./PutOnSale";
 
 interface Phone {
@@ -86,7 +84,7 @@ export const PhoneDetailsModal = ({ phone, visible, onHide, isOwned }: Props) =>
             </table>
           </div>
 
-          <PutOnSale id={phone.id}></PutOnSale>
+          <PutOnSale id={phone.id} isOwned={isOwned}></PutOnSale>
         </label>
       </label>
     </>
