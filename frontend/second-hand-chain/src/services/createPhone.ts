@@ -62,18 +62,18 @@ const createPhone = async (phone: Phone) => {
                             ).encodeABI()
                     }
                 
-                        try {
-                            var response : string = await window.ethereum.request({
-                                method: 'eth_sendTransaction',
-                                params: [tx]
-                            })
-                            return response
-                        } catch (error) {
-                            console.log(error);
-                        }
+                    try {
+                        var response : string = await window.ethereum.request({
+                            method: 'eth_sendTransaction',
+                            params: [tx]
+                        })
+                        return response
+                    } catch (error) {
+                        return "You must log into Metamask"
                     }
+                }
                    
-                    return await fetchHash()
+                 return await fetchHash()
                     
             } catch (error) {
                 console.log(error)

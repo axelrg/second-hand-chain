@@ -77,10 +77,13 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
           setErrors("Imei is already registered");
           setTypeAlert("alert-error");
           setVisibleErrors(true);
-          
         } else {
           createPhone(phone).then((res) => {
-            if (res != "" && res != undefined) {
+            if (res == "You must log into Metamask") {
+              setErrors(res);
+              setVisibleErrors(true);
+              setTypeAlert("alert-error");
+            } else if (res != "" && res != undefined) {
               setErrors(
                 "https://sepolia.etherscan.io/tx/".concat(res?.toString())
               );
