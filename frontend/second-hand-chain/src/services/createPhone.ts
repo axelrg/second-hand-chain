@@ -7,7 +7,7 @@ import { AbiItem } from "web3-utils";
 
 
 import SecondHandChainCompiled from "../../../../truffle/build/contracts/ERC721.json";
-const contractAddressSHC: string = "0xc725DDDfE7a82865DdbE3c1ee66b26c9a0252237";
+const contractAddressSHC: string = "0x57C2531dA183eA7B8E78659fDF37206c8f43bD8E";
 const abi = SecondHandChainCompiled;
 let selectedAccount: string;
 var web3: Web3 = new Web3(
@@ -55,8 +55,8 @@ const createPhone = async (phone: Phone) => {
                               phone.imei,
                               phone.brand,
                               phone.colour,
-                              phone.price,
-                              phone.salePrice,
+                              web3.utils.toWei(phone.price, 'ether'),
+                              web3.utils.toWei(phone.salePrice, 'ether'),
                               phone.ram,
                               phone.mem
                             ).encodeABI()

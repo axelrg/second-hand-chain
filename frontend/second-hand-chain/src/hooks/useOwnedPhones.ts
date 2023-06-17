@@ -5,7 +5,7 @@ import { AbiItem } from "web3-utils";
 const abi = SecondHandChainCompiled;
 
 import SecondHandChainCompiled from "../../../../truffle/build/contracts/ERC721.json";
-const contractAddressSHC: string = "0xc725DDDfE7a82865DdbE3c1ee66b26c9a0252237";
+const contractAddressSHC: string = "0x57C2531dA183eA7B8E78659fDF37206c8f43bD8E";
 
 var web3: Web3 = new Web3(
     "https://eth-sepolia.g.alchemy.com/v2/MGfg5dJiVVHJmYuN_lcjYLa5snWbIyDz"
@@ -24,7 +24,7 @@ interface Phone{
     price : BigInteger
 }
 
-const usePhones = () => {
+const usePhones = (changeFetchedPhones:string) => {
     let provider = window.ethereum;
     let selectedAccount: string;
     const [phones , setPhones] = useState<Phone[]>([]);
@@ -51,11 +51,13 @@ const usePhones = () => {
           console.log(response)
           setPhones(response)
         } catch (error) {
+          
           console.log(error);
+          setPhones([])
         }
       };
       fetchPhones();
-    }, []);
+    }, [changeFetchedPhones]);
 
     return phones
 }

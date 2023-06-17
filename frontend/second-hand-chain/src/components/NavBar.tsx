@@ -8,12 +8,13 @@ interface Props {
 
 export const NavBar = ({ changeFetchedPhones }: Props) => {
   const [modalMintVisible, setMintVisibility] = useState<boolean>(false);
+  const [buttonSelected, setbuttonSelected] = useState<string>("phonesOnSale");
   return (
     <>
       <div className="navbar bg-base-100">
         <div className="navbar-start">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn btn-ghost lg:hidden">
+          <div tabIndex={10} className=" z-40 dropdown">
+            <label tabIndex={10} className="btn btn-ghost lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -30,18 +31,54 @@ export const NavBar = ({ changeFetchedPhones }: Props) => {
               </svg>
             </label>
             <ul
-              tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+              tabIndex={10}
+              className=" z-40 dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li>
-                <a onClick={(e) => changeFetchedPhones(e, "ownedPhones")}>
-                  Your Phones
-                </a>
+                {buttonSelected == "ownedPhones" && (
+                  <a
+                    onClick={(e) => {
+                      changeFetchedPhones(e, "ownedPhones");
+                      setbuttonSelected("ownedPhones");
+                    }}
+                  >
+                    Your Phones
+                    <div className="badge badge-sm badge-primary"></div>
+                  </a>
+                )}
+                {buttonSelected != "ownedPhones" && (
+                  <a
+                    onClick={(e) => {
+                      changeFetchedPhones(e, "ownedPhones");
+                      setbuttonSelected("ownedPhones");
+                    }}
+                  >
+                    Your Phones
+                  </a>
+                )}
               </li>
               <li>
-                <a onClick={(e) => changeFetchedPhones(e, "phonesOnSale")}>
-                  Phones On Sale
-                </a>
+                {buttonSelected == "phonesOnSale" && (
+                  <a
+                    onClick={(e) => {
+                      changeFetchedPhones(e, "phonesOnSale");
+                      setbuttonSelected("phonesOnSale");
+                    }}
+                  >
+                    Phones On Sale
+                    <div className="badge badge-sm badge-primary"></div>
+                  </a>
+                )}
+                {buttonSelected != "phonesOnSale" && (
+                  <a
+                    onClick={(e) => {
+                      changeFetchedPhones(e, "phonesOnSale");
+                      setbuttonSelected("phonesOnSale");
+                    }}
+                  >
+                    Phones On Sale
+                  </a>
+                )}
               </li>
               <li>
                 <a onClick={() => setMintVisibility(true)}>Create Phone</a>
@@ -56,14 +93,50 @@ export const NavBar = ({ changeFetchedPhones }: Props) => {
               <a onClick={() => setMintVisibility(true)}>Create Phone</a>
             </li>
             <li>
-              <a onClick={(e) => changeFetchedPhones(e, "ownedPhones")}>
-                Your Phones
-              </a>
+              {buttonSelected == "ownedPhones" && (
+                <a
+                  onClick={(e) => {
+                    changeFetchedPhones(e, "ownedPhones");
+                    setbuttonSelected("ownedPhones");
+                  }}
+                >
+                  Your Phones
+                  <div className="badge badge-sm badge-primary"></div>
+                </a>
+              )}
+              {buttonSelected != "ownedPhones" && (
+                <a
+                  onClick={(e) => {
+                    changeFetchedPhones(e, "ownedPhones");
+                    setbuttonSelected("ownedPhones");
+                  }}
+                >
+                  Your Phones
+                </a>
+              )}
             </li>
             <li>
-              <a onClick={(e) => changeFetchedPhones(e, "phonesOnSale")}>
-                Phones On Sale
-              </a>
+              {buttonSelected == "phonesOnSale" && (
+                <a
+                  onClick={(e) => {
+                    changeFetchedPhones(e, "phonesOnSale");
+                    setbuttonSelected("phonesOnSale");
+                  }}
+                >
+                  Phones On Sale
+                  <div className="badge badge-sm badge-primary"></div>
+                </a>
+              )}
+              {buttonSelected != "phonesOnSale" && (
+                <a
+                  onClick={(e) => {
+                    changeFetchedPhones(e, "phonesOnSale");
+                    setbuttonSelected("phonesOnSale");
+                  }}
+                >
+                  Phones On Sale
+                </a>
+              )}
             </li>
           </ul>
         </div>
@@ -72,6 +145,7 @@ export const NavBar = ({ changeFetchedPhones }: Props) => {
           <WalletButton></WalletButton>
         </div>
       </div>
+
       {modalMintVisible && (
         <MintPhoneModal
           visible={modalMintVisible}

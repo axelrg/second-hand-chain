@@ -2,7 +2,7 @@ import Web3 from "web3";
 import Contract from "web3-eth-contract";
 import { AbiItem } from "web3-utils";
 import SecondHandChainCompiled from "../../../../truffle/build/contracts/ERC721.json";
-const contractAddressSHC: string = "0xc725DDDfE7a82865DdbE3c1ee66b26c9a0252237";
+const contractAddressSHC: string = "0x57C2531dA183eA7B8E78659fDF37206c8f43bD8E";
 const abi = SecondHandChainCompiled;
 let selectedAccount: string;
 var web3: Web3 = new Web3(

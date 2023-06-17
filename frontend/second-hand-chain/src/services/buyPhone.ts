@@ -7,13 +7,13 @@ import getPhoneOwner from "./getPhoneOwner";
 const abi = Erc721Compiled;
 
 
-const contractAddressERC: string = "0xc725DDDfE7a82865DdbE3c1ee66b26c9a0252237";
+const contractAddressERC: string = "0x57C2531dA183eA7B8E78659fDF37206c8f43bD8E";
 let selectedAccount: string;
 var web3: Web3 = new Web3(
     "https://eth-sepolia.g.alchemy.com/v2/MGfg5dJiVVHJmYuN_lcjYLa5snWbIyDz"
   );
 
-const buyPhone = async (id:Number) => {
+const buyPhone = async (id:Number, price:string) => {
     let provider = window.ethereum;
 
     const contract: Contract = new web3.eth.Contract(
@@ -27,18 +27,19 @@ const buyPhone = async (id:Number) => {
                 var accounts : string[] = await provider.request({method:'eth_requestAccounts'})
                 console.log(accounts)
                 selectedAccount=accounts[0]
+                }else{
+                    console.log("sip")
+                    return "You must log into Metamask"
                 }
 
                 const signBuyPhone = async () => {
 
                     var from = await getPhoneOwner(id)
 
-                    console.log(from)
-
                     const tx= {
                         from: selectedAccount,
                         to: contractAddressERC,
-                        value: web3.utils.toHex(web3.utils.toWei('0.2', 'ether')),
+                        value: web3.utils.toHex(price),
                         
                         'data': contract.methods.transferFrom(
                             from, 
@@ -53,12 +54,14 @@ const buyPhone = async (id:Number) => {
                             })
                             return response
                         } catch (error) {
-                            console.log(error);
+                            console.log(error)
+                            return "You must log into Metamask";
                         }
                     }
                     return await signBuyPhone()
             } catch (error) {
                 console.log(error)
+                return "You must log into Metamask"
             }
         };
     

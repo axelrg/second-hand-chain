@@ -18,8 +18,8 @@ const Alert = ({ errorText, onHide, typeAlert }: Props) => {
   }, []);
   return (
     <>
-      {errorText.includes("https://sepolia.etherscan.io/tx/") &&
-        openInNewTab(errorText)}
+    
+      <br />
       <div className={"alert ".concat(typeAlert).concat(" shadow-lg")}>
         <div>
           <svg
@@ -28,24 +28,35 @@ const Alert = ({ errorText, onHide, typeAlert }: Props) => {
             fill="none"
             viewBox="0 0 24 24"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
+            {typeAlert == "alert-error" && (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            )}
+            {typeAlert == "alert-success" && (
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            )}
           </svg>
           <span>
             {errorText.includes("https://sepolia.etherscan.io/tx/")
-              ? "Follow your transaction on Etherscan"
+              ? "Follow your transaction on Etherscan: "
               : errorText}
           </span>
           <a className="link link-error" href={errorText}>
             {errorText.includes("https://sepolia.etherscan.io/tx/") &&
-              "Etherscan tranasaction link"}
+              "Etherscan transaction link"}
           </a>
         </div>
       </div>
+      <br />
     </>
   );
 };

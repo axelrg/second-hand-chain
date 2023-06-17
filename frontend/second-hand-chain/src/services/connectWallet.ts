@@ -28,7 +28,7 @@ const connectWallet = () => {
     fetchWallet();
    }
    else{
-    alert("Install Metamask")
+    //alert("Install Metamask")
    }
     
 }

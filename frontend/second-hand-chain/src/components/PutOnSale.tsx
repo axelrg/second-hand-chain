@@ -4,21 +4,38 @@ import putPhoneOnSale from "../services/putPhoneOnSale";
 import Alert from "./Alert";
 import removePhoneFromSale from "../services/removePhoneFromSale";
 import buyPhone from "../services/buyPhone";
+import Web3 from "web3";
+import checkWalletDontOwnPhone from "../services/checkWalletDontOwnPhone";
 
 interface Props {
   id: Number;
   isOwned: boolean;
+  price: string;
 }
 
-export const PutOnSale = ({ id, isOwned }: Props) => {
+export const PutOnSale = ({ id, isOwned, price }: Props) => {
   const [isOnSale, setIsOnSale] = useState(false);
+  const [isOnSaleOwned, setIsOnSaleOwned] = useState(false);
   const [errors, setErrors] = useState("");
   const [visibleErrors, setVisibleErrors] = useState(false);
   const [typeAlert, setTypeAlert] = useState("");
+  const [buyButtonAlert, setBuyButtonAlert] = useState("");
 
   isPhoneOnSale(id).then((res) => {
     if (res) {
       setIsOnSale(res);
+    }
+  });
+
+  checkWalletDontOwnPhone(id).then((res) => {
+    if (res == "true") {
+      setIsOnSaleOwned(true);
+      setBuyButtonAlert("You Own This Phone");
+    } else if (res == "false") {
+      setIsOnSaleOwned(false);
+    } else {
+      setIsOnSaleOwned(true);
+      setBuyButtonAlert(res);
     }
   });
 
@@ -31,14 +48,36 @@ export const PutOnSale = ({ id, isOwned }: Props) => {
       setPriceRef.current !== null &&
       setPriceRef.current.value !== ""
     ) {
-      putPhoneOnSale(id.toString(), setPriceRef.current.value).then((res) => {
-        if (res != "" && res != undefined) {
-          setErrors("https://sepolia.etherscan.io/tx/".concat(res?.toString()));
-          setVisibleErrors(true);
-          setTypeAlert("alert-success");
+      putPhoneOnSale(id.toString(), setPriceRef.current.value.toString()).then(
+        (res) => {
+          if (
+            res != "" &&
+            res != undefined &&
+            res == "You must log into Metamask"
+          ) {
+            setErrors(res);
+            setVisibleErrors(true);
+            setTypeAlert("alert-error");
+          } else if (res != "" && res != undefined) {
+            setErrors(
+              "https://sepolia.etherscan.io/tx/".concat(res?.toString())
+            );
+            setVisibleErrors(true);
+            setTypeAlert("alert-success");
+          }
         }
-      });
+      );
     }
+  };
+
+  const buttonBuyPhone = (id: Number, price: string) => {
+    buyPhone(id, price).then((res) => {
+      if (res != "" && res != undefined) {
+        setErrors("https://sepolia.etherscan.io/tx/".concat(res?.toString()));
+        setVisibleErrors(true);
+        setTypeAlert("alert-success");
+      }
+    });
   };
 
   const remove = () => {
@@ -63,16 +102,23 @@ export const PutOnSale = ({ id, isOwned }: Props) => {
       {isOwned && isOnSale && (
         <>
           <br />
-          <h4 className="link-success">Is on sale</h4>
+          <h2 className="link-success justify-center">
+            Is on sale for {Web3.utils.fromWei(price)} ETH
+          </h2>
           <br />
           <form onSubmit={handleSubmitPutOnSale}>
             <div className="form-control justify-center">
-              <input
-                ref={setPriceRef}
-                type="text"
-                placeholder="Type here"
-                className="input input-bordered input-primary w-full max-w-xs justify-center"
-              />
+              <div className=" p-3">
+                <label htmlFor="salePrice" className="input-group">
+                  <span>Sale Price (ETH)</span>
+                  <input
+                    ref={setPriceRef}
+                    type="text"
+                    placeholder="0.025"
+                    className="input input-bordered"
+                  />
+                </label>
+              </div>
               <br />
               <input
                 type="submit"
@@ -95,12 +141,17 @@ export const PutOnSale = ({ id, isOwned }: Props) => {
           <br />
           <form onSubmit={handleSubmitPutOnSale}>
             <div className="form-control justify-center">
-              <input
-                ref={setPriceRef}
-                type="text"
-                placeholder="Type here"
-                className="input input-bordered input-primary w-full max-w-xs justify-center"
-              />
+              <div className=" p-3">
+                <label htmlFor="salePrice" className="input-group">
+                  <span>Sale Price (ETH)</span>
+                  <input
+                    ref={setPriceRef}
+                    type="text"
+                    placeholder="0.025"
+                    className="input input-bordered"
+                  />
+                </label>
+              </div>
               <br />
               <input
                 type="submit"
@@ -113,9 +164,31 @@ export const PutOnSale = ({ id, isOwned }: Props) => {
         </>
       )}
 
-      {isOwned==false && isOnSale && <><button className="btn btn-success" onClick={()=>buyPhone(id)}>
-            Buy Phone
-          </button></>}
+      {isOnSaleOwned == false && isOwned == false && isOnSale && (
+        <>
+          <br />
+          <button
+            className="btn btn-success"
+            onClick={() => buttonBuyPhone(id, price)}
+          >
+            Buy Phone For {Web3.utils.fromWei(price)}(ETH)
+          </button>
+        </>
+      )}
+
+      {isOnSaleOwned && isOwned == false && isOnSale && (
+        <>
+          <br />
+          <div className="indicator">
+            <span className="indicator-item badge badge-error">
+              {buyButtonAlert}
+            </span>
+            <button className="btn btn-disabled">
+              Buy Phone For {Web3.utils.fromWei(price)}(ETH)
+            </button>
+          </div>
+        </>
+      )}
     </>
   );
 };

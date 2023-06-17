@@ -1,7 +1,8 @@
 import { PutOnSale } from "./PutOnSale";
+import Web3 from "web3";
 
 interface Phone {
-  id:Number
+  id: Number;
   model: string;
   brand: string;
   colour: string;
@@ -17,11 +18,15 @@ interface Props {
   phone: Phone;
   visible: boolean;
   onHide: () => void;
-  isOwned: boolean
+  isOwned: boolean;
 }
 
-export const PhoneDetailsModal = ({ phone, visible, onHide, isOwned }: Props) => {
-
+export const PhoneDetailsModal = ({
+  phone,
+  visible,
+  onHide,
+  isOwned,
+}: Props) => {
   var table = [];
 
   for (let i = 0; i < phone.owners.length; i++) {
@@ -31,10 +36,9 @@ export const PhoneDetailsModal = ({ phone, visible, onHide, isOwned }: Props) =>
     table.push({
       index: i,
       owner: phone.owners[i],
-      price: phone.salePrice[i],
+      price: Web3.utils.fromWei(phone.salePrice[i].toString()),
       time: timeFormatted.toLocaleDateString(),
     });
-
   }
 
   return (
@@ -51,7 +55,6 @@ export const PhoneDetailsModal = ({ phone, visible, onHide, isOwned }: Props) =>
         <label className="modal-box relative max-w-3xl" htmlFor="">
           <h3 className="text-lg font-bold text-primary">{phone.brand}</h3>
           <h3 className="text-lg font-bold text-primary">{phone.model}</h3>
-
           <p className="py-4 justify-center">RAM (Gb):&nbsp;&nbsp;&nbsp;</p>
           <div className="badge badge-primary">{phone.ram}</div>
 
@@ -67,7 +70,7 @@ export const PhoneDetailsModal = ({ phone, visible, onHide, isOwned }: Props) =>
                 <tr>
                   <td>Index</td>
                   <td>Owner</td>
-                  <td>Buy price</td>
+                  <td>Buy price (ETH)</td>
                   <td>Date</td>
                 </tr>
               </thead>
@@ -84,7 +87,11 @@ export const PhoneDetailsModal = ({ phone, visible, onHide, isOwned }: Props) =>
             </table>
           </div>
 
-          <PutOnSale id={phone.id} isOwned={isOwned}></PutOnSale>
+          <PutOnSale
+            id={phone.id}
+            isOwned={isOwned}
+            price={phone.price.toString()}
+          ></PutOnSale>
         </label>
       </label>
     </>

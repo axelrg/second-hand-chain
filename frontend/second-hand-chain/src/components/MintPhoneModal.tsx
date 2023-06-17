@@ -205,11 +205,11 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
 
                 <div className=" p-3">
                   <label htmlFor="price" className="input-group">
-                    <span>Price</span>
+                    <span>Price (ETH)</span>
                     <input
                       ref={priceRef}
                       id="price"
-                      type="number"
+                      type="text"
                       placeholder="0.03"
                       className="input input-bordered"
                     />
@@ -218,11 +218,11 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
 
                 <div className=" p-3">
                   <label htmlFor="salePrice" className="input-group">
-                    <span>Sale Price</span>
+                    <span>Sale Price (ETH)</span>
                     <input
                       ref={salePriceRef}
                       id="salePrice"
-                      type="number"
+                      type="text"
                       placeholder="0.025"
                       className="input input-bordered"
                     />
