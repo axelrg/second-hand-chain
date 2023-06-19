@@ -7,7 +7,7 @@ import getPhoneOwner from "./getPhoneOwner";
 const abi = Erc721Compiled;
 
 
-const contractAddressERC: string = "0x57C2531dA183eA7B8E78659fDF37206c8f43bD8E";
+const contractAddressERC: string = "0xdB763aD869253e0eA95f64c7150d02A13dC5A7dD";
 let selectedAccount: string;
 var web3: Web3 = new Web3(
     "https://eth-sepolia.g.alchemy.com/v2/MGfg5dJiVVHJmYuN_lcjYLa5snWbIyDz"

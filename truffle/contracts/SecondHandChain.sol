@@ -42,6 +42,7 @@ contract SecondHandChain {
         uint[] saleTime;
         uint[] salePrice;
         uint price;
+        string url;
     }
 
     Phone[] public phones;
@@ -126,7 +127,8 @@ contract SecondHandChain {
         uint _price,
         uint _salePrice,
         uint16 _ram,
-        uint32 _mem
+        uint32 _mem,
+        string  memory _url
     ) public {
         require(isImeiRegistered[_imei] == false, "IMEI already exists");
 
@@ -137,6 +139,7 @@ contract SecondHandChain {
         phone.ram = _ram;
         phone.mem = _mem;
         phone.price = _salePrice;
+        phone.url = _url;
 
         phones.push(phone);
         phonesPerOwner[msg.sender]++;

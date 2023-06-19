@@ -7,7 +7,8 @@ import { AbiItem } from "web3-utils";
 
 
 import SecondHandChainCompiled from "../../../../truffle/build/contracts/ERC721.json";
-const contractAddressSHC: string = "0x57C2531dA183eA7B8E78659fDF37206c8f43bD8E";
+import nftStorage from "./nftStorage";
+const contractAddressSHC: string = "0xdB763aD869253e0eA95f64c7150d02A13dC5A7dD";
 const abi = SecondHandChainCompiled;
 let selectedAccount: string;
 var web3: Web3 = new Web3(
@@ -24,6 +25,7 @@ var web3: Web3 = new Web3(
     mem: string
     salePrice : string
     price : string
+    image : File
 }
 
 
@@ -43,9 +45,12 @@ const createPhone = async (phone: Phone) => {
                 selectedAccount=accounts[0]
                 const balance : string = await web3.eth.getBalance(accounts[0])
                 console.log(balance)
+                } else { 
+                    return "You must log into Metamask" 
                 }
 
                 const fetchHash = async () => {
+                    var url = await nftStorage(phone)
                     const tx = {
                         from: selectedAccount,
                         to: contractAddressSHC,
@@ -58,7 +63,8 @@ const createPhone = async (phone: Phone) => {
                               web3.utils.toWei(phone.price, 'ether'),
                               web3.utils.toWei(phone.salePrice, 'ether'),
                               phone.ram,
-                              phone.mem
+                              phone.mem,
+                              url
                             ).encodeABI()
                     }
                 

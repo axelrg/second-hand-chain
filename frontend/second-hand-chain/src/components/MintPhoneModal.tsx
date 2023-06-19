@@ -2,6 +2,7 @@ import { FormEvent, useRef, useState } from "react";
 import Alert from "./Alert";
 import createPhone from "../services/createPhone";
 import isImeiRegistered from "../services/isImeiRegistered";
+import nftStorage from "../services/nftStorage";
 
 interface Props {
   visible: boolean;
@@ -17,6 +18,7 @@ interface Phone {
   mem: string;
   salePrice: string;
   price: string;
+  image: File
 }
 
 const MintPhoneModal = ({ visible, onHide }: Props) => {
@@ -32,6 +34,7 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
   const memRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const salePriceRef = useRef<HTMLInputElement>(null);
+  const imageRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
@@ -59,7 +62,10 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
       priceRef.current.value !== "" &&
       salePriceRef !== null &&
       salePriceRef.current !== null &&
-      salePriceRef.current.value !== ""
+      salePriceRef.current.value !== "" &&
+      imageRef !== null &&
+      imageRef.current !== null &&
+      imageRef.current.files !== null
     ) {
       const phone: Phone = {
         model: modelRef.current.value,
@@ -70,8 +76,9 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
         mem: memRef.current.value,
         salePrice: salePriceRef.current.value,
         price: priceRef.current.value,
+        image: imageRef.current.files[0]
       };
-
+      
       isImeiRegistered(phone.imei).then((res) => {
         if (res) {
           setErrors("Imei is already registered");
@@ -191,6 +198,14 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
                       className="input input-bordered"
                     />
                   </label>
+                </div>
+
+                <div className=" p-3">
+                  <input
+                    ref={imageRef}
+                    type="file"
+                    className="file-input file-input-bordered w-full max-w-xs"
+                  />
                 </div>
 
                 <div className=" p-3">

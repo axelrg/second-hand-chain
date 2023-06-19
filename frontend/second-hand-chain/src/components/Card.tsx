@@ -4,6 +4,7 @@ import Web3 from "web3";
 import hardDriveIcon from "./../../public/hard-drive-svgrepo-com.svg";
 import ramIcon from "./../../public/ram-memory-ram-svgrepo-com.svg";
 import colourIcon from "./../../public/palette-svgrepo-com.svg";
+import { NFTStorage } from "nft.storage";
 
 interface Props {
   phone: Phone;
@@ -21,17 +22,40 @@ interface Phone {
   saleTime: BigInteger[];
   salePrice: BigInteger[];
   price: BigInteger;
+  url: string;
+}
+interface NFTStorageResponse {
+  name: string;
+  image: string;
 }
 
 export const Card = ({ phone, isOwned }: Props) => {
   const [modalPhoneCardVisible, setmodalPhoneCardVisibility] =
     useState<boolean>(false);
+
+  const [imageR, setImageR] = useState<string>("");
+
+  async function getImage(url: string) {
+    var gatewayUrl = url.replace("ipfs://", "https://nftstorage.link/ipfs/");
+    var response = await fetch(gatewayUrl);
+    var data: NFTStorageResponse = await response.json();
+    return data.image.replace("ipfs://", "https://nftstorage.link/ipfs/");
+  }
+
+  var image = "";
+
+  getImage(phone.url).then((res) => {
+    console.log(res);
+    image = res;
+    setImageR(image);
+  });
+
   return (
     <>
       <div>
         <div className=" card card-compact w-96 shadow-xl bg-accent-focus over">
           <figure>
-            <img src="https://media.istockphoto.com/id/1135715079/photo/yellowstone-national-park-wyoming-usa.jpg?s=612x612&w=0&k=20&c=ZWAnLEFlZHLSZYo7JLx2bgvPEL29jOdIk0_MRdTreB0=" />
+            <img src={imageR} />
           </figure>
 
           <div className="card-body">

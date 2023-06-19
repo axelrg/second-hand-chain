@@ -16,6 +16,7 @@ interface Phone {
   saleTime: BigInteger[];
   salePrice: BigInteger[];
   price: BigInteger;
+  url: string
 }
 
 const App = () => {
