@@ -72,7 +72,7 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
         brand: brandRef.current.value,
         imei: imeiRef.current.value,
         colour: colourRef.current.value,
-        ram: memRef.current.value,
+        ram: ramRef.current.value,
         mem: memRef.current.value,
         salePrice: salePriceRef.current.value,
         price: priceRef.current.value,
