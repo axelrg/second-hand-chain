@@ -85,7 +85,12 @@ export const NavBar = ({ changeFetchedPhones }: Props) => {
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost normal-case text-xl">SHC</a>
+
+          <img
+            src="/iron-chain-svgrepo-com.svg"
+            alt="Memory"
+            className="inline object-cover h-12 w-12 justify-center"
+          />
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">

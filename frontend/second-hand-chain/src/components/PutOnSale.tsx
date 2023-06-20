@@ -72,7 +72,12 @@ export const PutOnSale = ({ id, isOwned, price }: Props) => {
 
   const buttonBuyPhone = (id: Number, price: string) => {
     buyPhone(id, price).then((res) => {
-      if (res != "" && res != undefined) {
+      if (
+        res != "" &&
+        res != undefined &&
+        res != "You must log into Metamask"
+      ) {
+        console.log(res);
         setErrors("https://sepolia.etherscan.io/tx/".concat(res?.toString()));
         setVisibleErrors(true);
         setTypeAlert("alert-success");
@@ -82,7 +87,11 @@ export const PutOnSale = ({ id, isOwned, price }: Props) => {
 
   const remove = () => {
     removePhoneFromSale(id.toString()).then((res) => {
-      if (res != "" && res != undefined) {
+      if (
+        res != "" &&
+        res != undefined &&
+        res != "You must log into Metamask"
+      ) {
         setErrors("https://sepolia.etherscan.io/tx/".concat(res?.toString()));
         setVisibleErrors(true);
         setTypeAlert("alert-success");

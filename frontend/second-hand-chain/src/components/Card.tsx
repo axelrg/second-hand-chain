@@ -4,7 +4,6 @@ import Web3 from "web3";
 import hardDriveIcon from "./../../public/hard-drive-svgrepo-com.svg";
 import ramIcon from "./../../public/ram-memory-ram-svgrepo-com.svg";
 import colourIcon from "./../../public/palette-svgrepo-com.svg";
-import { NFTStorage } from "nft.storage";
 
 interface Props {
   phone: Phone;
