@@ -7,10 +7,10 @@ import getPhoneOwner from "./getPhoneOwner";
 const abi = Erc721Compiled;
 
 
-const contractAddressERC: string = "0xdB763aD869253e0eA95f64c7150d02A13dC5A7dD";
+const contractAddressERC: string = import.meta.env.VITE_CONTRACT_ADDRESS;
 let selectedAccount: string;
 var web3: Web3 = new Web3(
-    "https://eth-sepolia.g.alchemy.com/v2/MGfg5dJiVVHJmYuN_lcjYLa5snWbIyDz"
+    "https://eth-sepolia.g.alchemy.com/v2/"+import.meta.env.VITE_ALCHEMY_API_KEY
   );
 
 const buyPhone = async (id:Number, price:string) => {

@@ -1,4 +1,4 @@
-const API_KEY= "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDcyZTI4OTRDQkJGMjVCYjYwQTg5NzdlMDZDQjMxRDgwZjIyOTA0MjEiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY4NzAyNTQ1Mjc5NiwibmFtZSI6IlNlY29uZCBIYW5kIENoYWluIn0._APivr845oRBHM0dTs2VU55eQ3blfhUB1qDivUqLsjk"
+const API_KEY= import.meta.env.VITE_NFT_STORAGE_API_KEY
 
 import { NFTStorage } from 'nft.storage'
 
