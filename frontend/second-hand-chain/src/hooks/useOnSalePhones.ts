@@ -35,10 +35,8 @@ const useOnSalePhones = (fetchPhones:string) => {
       const fetchPhones = async () => {
         try {
           var response : Phone[] = await contract.methods.getAllPhonesOnSale().call();
-          console.log(response)
           setPhones(response)
         } catch (error) {
-          console.log(error);
         }
       };
       fetchPhones();

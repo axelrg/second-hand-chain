@@ -41,10 +41,8 @@ const createPhone = async (phone: Phone) => {
             try {
                 if (typeof provider !== 'undefined'){
                 var accounts : string[] = await provider.request({method:'eth_requestAccounts'})
-                console.log(accounts)
                 selectedAccount=accounts[0]
                 const balance : string = await web3.eth.getBalance(accounts[0])
-                console.log(balance)
                 } else { 
                     return "You must log into Metamask" 
                 }
@@ -82,7 +80,7 @@ const createPhone = async (phone: Phone) => {
                  return await fetchHash()
                     
             } catch (error) {
-                console.log(error)
+                return "You must sign it in Metamask"
             }
         };
     

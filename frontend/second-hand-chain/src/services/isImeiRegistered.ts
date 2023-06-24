@@ -19,7 +19,6 @@ const isImeiRegistered = async (imei:string) => {
           var response : boolean = await contract.methods.imeiRegistered(imei).call();
           return response
         } catch (error) {
-          console.log(error);
         }
       }
   return await fetchimeiRegistered();

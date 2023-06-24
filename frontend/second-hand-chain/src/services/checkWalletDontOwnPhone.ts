@@ -32,7 +32,6 @@ const checkWalletDontOwnPhone = async (id:Number) => {
             return "false"
           }
         } catch (error) {
-          console.log(error);
           return "Log into Metamask"
           
         }

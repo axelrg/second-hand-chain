@@ -34,10 +34,8 @@ const usePhones = () => {
       const fetchPhones = async () => {
         try {
           var response : Phone[] = await contract.methods.getPhones().call();
-          console.log(response)
           setPhones(response)
         } catch (error) {
-          console.log("ERROR FETCHING PHONES");
         }
       };
       fetchPhones();

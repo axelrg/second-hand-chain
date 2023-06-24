@@ -44,7 +44,6 @@ export const Card = ({ phone, isOwned }: Props) => {
   var image = "";
 
   getImage(phone.url).then((res) => {
-    console.log(res);
     image = res;
     setImageR(image);
   });

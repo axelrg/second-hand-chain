@@ -77,7 +77,6 @@ export const PutOnSale = ({ id, isOwned, price }: Props) => {
         res != undefined &&
         res != "You must log into Metamask"
       ) {
-        console.log(res);
         setErrors("https://sepolia.etherscan.io/tx/".concat(res?.toString()));
         setVisibleErrors(true);
         setTypeAlert("alert-success");

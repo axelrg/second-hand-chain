@@ -25,10 +25,8 @@ const buyPhone = async (id:Number, price:string) => {
             try {
                 if (typeof provider !== 'undefined'){
                 var accounts : string[] = await provider.request({method:'eth_requestAccounts'})
-                console.log(accounts)
                 selectedAccount=accounts[0]
                 }else{
-                    console.log("sip")
                     return "You must log into Metamask"
                 }
 
@@ -54,13 +52,11 @@ const buyPhone = async (id:Number, price:string) => {
                             })
                             return response
                         } catch (error) {
-                            console.log(error)
                             return "You must log into Metamask";
                         }
                     }
                     return await signBuyPhone()
             } catch (error) {
-                console.log(error)
                 return "You must log into Metamask"
             }
         };

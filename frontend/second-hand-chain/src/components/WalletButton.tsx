@@ -16,7 +16,6 @@ export const WalletButton = () => {
           var accounts: string[] = await provider.request({
             method: "eth_requestAccounts",
           });
-          console.log(accounts);
           selectedAccount = accounts[0];
           setConected(true);
           isConnected = true;
@@ -24,7 +23,6 @@ export const WalletButton = () => {
           setError("");
         } catch (error) {
           setError("Log in from Metamask extension");
-          console.log(error);
         }
       };
 

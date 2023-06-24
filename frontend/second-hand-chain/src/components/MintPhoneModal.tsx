@@ -18,7 +18,7 @@ interface Phone {
   mem: string;
   salePrice: string;
   price: string;
-  image: File
+  image: File;
 }
 
 const MintPhoneModal = ({ visible, onHide }: Props) => {
@@ -76,9 +76,9 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
         mem: memRef.current.value,
         salePrice: salePriceRef.current.value,
         price: priceRef.current.value,
-        image: imageRef.current.files[0]
+        image: imageRef.current.files[0],
       };
-      
+
       isImeiRegistered(phone.imei).then((res) => {
         if (res) {
           setErrors("Imei is already registered");
@@ -115,6 +115,7 @@ const MintPhoneModal = ({ visible, onHide }: Props) => {
         className="modal-toggle"
         checked={visible}
         onClick={() => onHide()}
+        readOnly
       />
 
       <label

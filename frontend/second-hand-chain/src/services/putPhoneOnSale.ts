@@ -14,7 +14,6 @@ var web3: Web3 = new Web3(
 
 const putPhoneOnSale = async (id:string, price:string) => {
     let provider = window.ethereum;
-    console.log(typeof price)
 
     const contract: Contract = new web3.eth.Contract(
     abi.abi as AbiItem[],
@@ -25,7 +24,6 @@ const putPhoneOnSale = async (id:string, price:string) => {
             try {
                 if (typeof provider !== 'undefined'){
                 var accounts : string[] = await provider.request({method:'eth_requestAccounts'})
-                console.log(accounts)
                 selectedAccount=accounts[0]
                 }
 
@@ -46,12 +44,10 @@ const putPhoneOnSale = async (id:string, price:string) => {
                             })
                             return response
                         } catch (error) {
-                            console.log(error);
                         }
                     }
                     return await signPutOnSale()
             } catch (error) {
-                console.log(error)
             }
         };
     

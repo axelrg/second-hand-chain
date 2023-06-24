@@ -38,9 +38,6 @@ const nftStorage = async (phone: Phone) => {
             }
         }
     })
-
-    console.log("Saved")
-    console.log(metadata.url)
     return metadata.url
 }
 

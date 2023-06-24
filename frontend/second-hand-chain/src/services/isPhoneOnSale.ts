@@ -19,7 +19,6 @@ const isPhoneOnSale = async (id:Number) => {
           var response : boolean = await contract.methods.getIsPhoneOnSale(id).call();
           return response
         } catch (error) {
-          console.log(error);
         }
       }
   return await fetchimeiRegistered();

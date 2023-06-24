@@ -41,19 +41,12 @@ const usePhones = (changeFetchedPhones:string) => {
         try {
             
             var accounts : string[] = await provider.request({method:'eth_requestAccounts'})
-            console.log(accounts)
             selectedAccount=accounts[0]
-            const balance : string = await web3.eth.getBalance(accounts[0])
-            console.log(balance)
             
-
-            console.log(selectedAccount)
           var response : Phone[] = await contract.methods.getAllPhonesInAddress(selectedAccount).call();
-          console.log(response)
           setPhones(response)
         } catch (error) {
           
-          console.log(error);
           setPhones([])
         }
       };

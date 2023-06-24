@@ -8,7 +8,7 @@ interface Props {
 
 export const NavBar = ({ changeFetchedPhones }: Props) => {
   const [modalMintVisible, setMintVisibility] = useState<boolean>(false);
-  const [buttonSelected, setbuttonSelected] = useState<string>("phonesOnSale");
+  const [buttonSelected, setbuttonSelected] = useState<string>("introduction");
   return (
     <>
       <div className="navbar bg-base-100">
@@ -86,11 +86,19 @@ export const NavBar = ({ changeFetchedPhones }: Props) => {
             </ul>
           </div>
 
-          <img
-            src="/iron-chain-svgrepo-com.svg"
-            alt="Memory"
-            className="inline object-cover h-12 w-12 justify-center"
-          />
+          <a
+            className="btn btn-ghost drawer-button h-12 normal-case"
+            onClick={(e) => {
+              changeFetchedPhones(e, "introduction");
+              setbuttonSelected("introduction");
+            }}
+          >
+            <img
+              src="/iron-chain-svgrepo-com.svg"
+              alt="Memory"
+              className="inline object-cover h-12 w-12 justify-center"
+            />
+          </a>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">

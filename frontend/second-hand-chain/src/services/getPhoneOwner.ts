@@ -19,7 +19,6 @@ const getPhoneOwner = async (id:Number) => {
           var response : boolean = await contract.methods.getPhoneOwner(id).call();
           return response
         } catch (error) {
-          console.log(error);
         }
       }
   return await fetchPhoneOwner();

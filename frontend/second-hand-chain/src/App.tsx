@@ -4,6 +4,7 @@ import { Card } from "./components/Card";
 import { NavBar } from "./components/NavBar";
 import useOnSalePhones from "./hooks/useOnSalePhones";
 import useOwnedPhones from "./hooks/useOwnedPhones";
+import { WebsiteDescription } from "./components/WebsiteDescription";
 
 interface Phone {
   id: Number;
@@ -16,14 +17,13 @@ interface Phone {
   saleTime: BigInteger[];
   salePrice: BigInteger[];
   price: BigInteger;
-  url: string
+  url: string;
 }
 
 const App = () => {
-  const [fetchPhones, setFetchPhones] = useState<string>("phonesOnSale");
+  const [fetchPhones, setFetchPhones] = useState<string>("introduction");
 
   const changeFetchedPhones = (e: React.MouseEvent, title: string) => {
-    console.log(fetchPhones);
     setFetchPhones(title);
   };
 
@@ -34,7 +34,7 @@ const App = () => {
       ></NavBar>
       <br />
       <div></div>
-      <div className=" gap-6">
+      <div className="gap-6 ">
         <ul className="flex flex-wrap justify-center gap-6">
           {fetchPhones == "ownedPhones" &&
             useOwnedPhones(fetchPhones).map((phone, index) => (
@@ -48,6 +48,10 @@ const App = () => {
                 <Card phone={phone} isOwned={false}></Card>
               </li>
             ))}
+
+          {fetchPhones == "introduction" && useOnSalePhones(fetchPhones) && (
+            <WebsiteDescription />
+          )}
         </ul>
       </div>
     </>
