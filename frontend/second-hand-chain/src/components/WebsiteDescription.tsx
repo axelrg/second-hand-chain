@@ -65,7 +65,7 @@ export const WebsiteDescription = () => {
 
       <a
         className="btn btn-ghost drawer-button h-20 normal-case"
-        href="https://github.com/axelrg/UBU-SecondHandChain"
+        href="https://github.com/axelrg/second-hand-chain"
       >
         <img
           className="w-20 h-20 btn-circle"
