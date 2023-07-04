@@ -1,0 +1,65 @@
+\apendice{Especificación de diseño}
+
+\section{Introducción}
+En este apéndice se va a comentar cómo se ha llevado a cabo el diseño de la aplicación, por ello comentaré cómo se han ido llevando a cabo las distintas partes del diseño.
+\section{Diseño de datos}
+
+En primer lugar, el diseño de datos va a ser algo diferente a la forma de hacerlo en \textit{Blockchain}. Por un lado, a bajo nivel el diseño de datos de \textit{Blockchain} se ha explicado en el capítulo de la memoria relativo a conceptos teóricos.
+
+
+Por ello, en esta sección me voy a centrar en el diseño de datos dentro de los \textit{smart contract} que forman Second Hand Chain que se puede consultar en la figura \ref{fig:anexos/disenioDatos}:
+
+\imagen{anexos/disenioDatos}{Conjunto de datos con los que operan los contratos}
+
+\begin{itemize}
+    \item Podemos ver que se compone de un  \textit{struct} que representa un teléfono.
+    \item Cada teléfono registrado se va a ir guardando en una lista de teléfonos.
+    \item Guardaremos un contador para el número de teléfonos en venta.
+    \item En un mapa registraremos a quién pertenece cada teléfono.
+    \item Además, guardaremos el número de teléfonos por dueño, este mapa es necesario por el patrón de diseño \textit{memory array building}, explicado en la memoria.
+    \item En otro mapa se lleva el recuento de los IMEI ya registrados.
+    \item Existe otro mapa para registrar si un teléfono está o no a la venta.
+    \item Por otro lado, los dos últimos mapas sirven respectivamente para der permisos a un tercero para transferir un token y para transferir todos los de una cuenta. Estos métodos, son necesarios para poder implementar los métodos encargados de gestionar los permisos de los \textit{NFT} de la interfaz \textit{IERC721}.
+    
+\end{itemize}
+
+\section{Diseño procedimental}
+A continuación se van a mostrar los distintos diagramas de secuencia correspondientes a Second Hand Chain:
+
+
+
+%\subsection{Consulta de teléfonos por parte de un usuario sin \textit{wallet}}
+\imagen{anexos/cu1seq}{Diagrama de secuencia de la consulta de teléfonos por parte de un usuario sin \textit{wallet}}
+
+%\subsection{Crear un teléfono}
+\imagen{anexos/cu3seq}{Diagrama de secuencia de la creación de un teléfono}
+
+%\subsection{Consulta de teléfonos}
+\imagen{anexos/cu4seq}{Diagrama de secuencia sobre la consulta de teléfonos}
+
+%\subsection{Puesta a la venta}
+\imagen{anexos/cu5seq}{Diagrama de secuencia de puesta a la venta}
+
+%\subsection{Cambio de precio}
+\imagen{anexos/cu6seq}{Diagrama de secuencia de cambio de precio de un teléfono a la venta}
+
+%\subsection{Retirada de la venta}
+\imagen{anexos/cu7seq}{Diagrama de secuencia de la retirada de la venta de un teléfono}
+
+%\subsection{Compra}
+\imagen{anexos/cu8seq}{Diagrama de secuencia de la compra de un teléfono}
+
+
+\section{Diseño arquitectónico}
+
+
+En la figura \ref{fig:anexos/despliegue} podemos ver el diagrama de diseño arquitectónico del conjunto de la aplicación:
+\begin{itemize}
+    \item Los usuarios (tanto de ordenador como de dispositivo móvil)  pueden contar con \textit{Metamask} o directamente con la aplicación.
+    \item \textit{Metamask} recibirá solicitudes del \textit{frontend} para firmar transacciones que devolverá a este y serán enviadas. Además un usuario puede iniciar sesión para poder consultar los datos asociados a su cuenta.
+    \item \textit{NFT.Storage} recibirá imágenes que almacenará, a cambio devolverá al \textit{frontend} el CID de esa imagen.
+    \item \textit{Alchemy}, nuestro proveedor de nodos recibirá peticiones de el \textit{frontend}, a las cuales responderá según tenga esa información. Además ejecutará las transacciones firmadas que reciba del \textit{frontend}.
+    \item El \textit{frontend} es la piedra angular de nuestra aplicación, el punto en común entre todos estos servicios y el encargado de su organización.
+\end{itemize}
+
+\imagen{anexos/despliegue}{Diagrama de diseño arquitectónico de la aplicación}

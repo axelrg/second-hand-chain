@@ -1,0 +1,201 @@
+\capitulo{4}{Técnicas y herramientas}
+
+En este capitulo vamos a ver las metodologías, técnicas y herramientas empleadas en este proyecto como pueden ser los diferentes lenguajes empleados, librerías, patrones de diseño o servicios de terceros.
+
+\section{Metodologías de gestión de proyectos}
+
+Durante el desarrollo de este trabajo se ha empleado la metodología \textit{Scrum}\cite{sachdeva2016scrum}. Esta metodología consiste en ir haciendo mejoras progresivas al producto en lo que se denomina como \textit{sprints}. En cada \textit{sprint} existen tareas a completar, el conjunto de todas ellas conforman el \textit{sprint backlog}. Además en esta metodología se realizan diferentes reuniones:
+\begin{itemize}
+    \item  \textit{Daily}: Se produce diariamente y los desarrolladores tienen obligada la asistencia.
+    \item  \textit{Sprint Review}: Se comentan las diferentes tareas realizadas en el \textit{sprint} por los diferentes miembros.
+    \item  \textit{Sprint Retrospective}: Se comparten las diferentes impresiones del los diferentes miembros.
+    \item  \textit{Sprint Planning}: Se deciden las tareas a realizar durante el sprint.
+\end{itemize}
+
+Además existen los siguientes roles:
+\begin{itemize}
+    \item  \textit{Product Owner}: Va a establecer prioridades para las diferentes tareas, además tiene la visión compleeta del producto a desarrollar.
+    \item  \textit{Scrum Master}: Su labor consiste en ayudar tanto a desarrolladores como al \textit{Product Owner} a tomar decisiones .
+    \item  \textit{Developers}: Son los encargados de llevar a cabo las diferentes tareas.
+\end{itemize}
+
+En nuestro caso, se ha organizado por \textit{sprints} de dos semanas aproximadamente donde se han ido sacando las distintas tareas adelante. Por cada finalización de sprint, se realizaba una reunión con los distintos tutores para comentar las distintas tareas realizadas y las tareas a realizar además de comentar posibles elementos bloqueantes para el desarrollo.
+
+\subsection{GitLab para gestión \textit{Scrum}}
+Para la gestión de las diferentes tareas se ha empleado \textit{GitLab}, ya que permite llevar la gestión de proyectos desde el mismo sitio que el control de versiones, lo cual resulta muy cómodo al poder enlazar tareas y \textit{commits}.
+
+No obstante también he encontrado otras características que juegan en su contra como su plan de pago, que es demasiado agresivo y limita a los usuarios gratuitos el poder acceder a elementos tan importantes como por ejemplo los \textit{Burn-down Charts}\footnote{Gráfica que permite evaluar el avance del equipo}.
+
+\section{Patrones de diseño}
+
+Durante el desarrollo de este proyecto se han usado algunos patrones de diseño que son descritos a continuación.
+
+\subsection{Patron \textit{Facade}}
+
+Este patrón de diseño \cite{schmidt1999wrapper} consiste en que se proporciona una serie de métodos que permiten de forma sencilla interactuar con un conjunto de gran complejidad que se encuentra detrás de estas.
+
+Un ejemplo en nuestro proyecto es la implementación de la interfaz \textit{ERC721} que interactúa con el resto de métodos del contrato Second Hand Chain y de el mismo (\textit{ERC721}) proporcionado unos métodos estandarizados que permiten de forma sencilla la gestión del \textit{NFT}.
+
+\subsection{Patrón de optimización en el uso de \textit{gas fees}}
+Este patrón es aplicable exclusivamente a las redes \textit{Blockchain} y consiste en optimizar lo máximo posible el pago de \textit{gas fees} para los usuarios. Como hemos visto en capítulos anteriores, estos costes pueden ser bastante representativos para los usuarios.
+
+\imagen{phoneStruct}{\textit{Struct} que representa un teléfono en Second Hand Chain}{0.5}
+
+Como podemos ver en la imagen \ref{fig:phoneStruct} se emplean diferentes tipos para cada dato del \textit{struct}:
+\begin{itemize}
+    \item  \textit{Id}: Para este dato se emplea el tamaño mas grande posible ya que podría darse el caso en el que al llenarse todos esos ids no se pudiesen crear más teléfonos o se sobre escribiesen los primeros.
+    \item  \textit{ram}: Los usuarios van a guardar este dato en Gb por lo que no hacen falta tantos bits.
+    \item  \textit{mem}: Como el almacenamiento es un valor en el que se pueden necesitar valores más altos he escogido uint32.
+    \item  \textit{precios}: Estos valores los he dejado en uint256 ya que realmente no se sabe cómo va a funcionar la inflación o la deflación en ETH a largo plazo, de hecho se ha demostrado un activo muy volátil.
+\end{itemize}
+
+Aun así hemos podido ahorrar bastante espacio en memoria adaptando los tipos al dato que realmente van a guardar. En este caso la ganancia es muy importante, ya que se va a multiplicar por todos los teléfonos que se guarden.
+
+\subsection{Patrón \textit{memory array building}}
+
+Este problema\cite{memoryarraybuilding}, figura \ref{fig:memArrEj}, se da, por ejemplo, cuando queremos recuperar los datos de los teléfonos a la venta. La resolución lógica fuera de \textit{Blockchain} sería crear una \textit{linkedList}\cite{bigocheatsheetBigOAlgorithm}, esto nos permitiría realizar inserciones y borrados en $\mathcal{O}(1)$ manteniendo siempre nuestra lista actualizada al quitar o poner a la venta un teléfono.
+
+\imagen{memArrEj}{\textit{memory array building} en Second Hand Chain}{0.9}
+
+El problema que surge en \textit{Ethereum} es que crear esa lista y mantenerla cuesta dinero. Mientras que iterar en datos ya escritos no, al poder obtenerlos directamente de nuestro nodo local en funciones tipo \textit{view}.
+
+Debemos tener en cuneta que por ejemplo en Second Hand Chain se debe filtrar por teléfonos a la venta y por teléfonos propiedad de una cuenta. Esto si se implementase mediante múltiples listas llevaría a un borrado y escritura de datos muy elevado. Mientras que con este patrón sacrificamos complejidad temporal a cambio de reducir los \textit{gas fees}.
+
+\subsection{Patrón \textit{Hook}}
+Este patrón se aplica en los distintos componentes de \textit{React}. Los \textit{hooks}\cite{patternsHooksPattern} permiten reutilizar código en toda la aplicación. Su principal función es manejar el estado de los componentes, este estado va a cambiar según se presione un botón, se reciba una respuesta de una consulta a nuestro nodo y en muchos otros casos. Los \textit{hooks} empleados en la aplicación son:
+\begin{itemize}
+    \item  \textit{useEffect}: Empleado principalmente para las llamadas a nuestro nodo de \textit{Ethereum}, permite ejecutar una porción de código cunado se dan unos cambios.
+    \item  \textit{useState}: Maneja el estado de una variable, el estado cambiara mediante su función set asociada y podemos recuperar el valor en cualquier momento.
+    \item  \textit{useRef}: Empleado para hacer referencia a elementos del DOM\footnote{Document Object Model} 
+    \item  \textit{custom Hooks}: Son Hooks personalizados, no vienen predefinidos como los tres anteriores. En la aplicación se emplaen tres para recuperar los móviles.
+\end{itemize}
+
+\section{Herramientas para el desarrollo del \textit{backend}}
+
+Como ya sabemos, la principal particularidad de este trabajo es el hecho de que su \textit{backend} se encuentra en \textit{Blockchain}. Por este motivo, no solo se condicionan las metodologías de programación o de diseño si no que también lo hace con las herramientas empleadas.
+
+\subsection{\textit{Solidity}}
+Para el desarrollo de los contratos inteligentes se ha empleado este lenguaje \cite{soliditylangSolidityProgramming} de programación definido por las siguientes características:
+\begin{itemize}
+    \item Es un lenguaje de alto nivel.
+    \item Dispone de orientación a objetos.
+    \item Tiene tipos estáticos, característica requerida debido a la necesidad de garantizar la inmutabilidad en \textit{Blockchain}, además este hecho ayuda a mantener la  pulcritud en el uso de espacio en memoria.
+    \item Permite el uso de librerías.
+\end{itemize}
+
+\subsection{\textit{Truffle Suite} y \textit{Ganache}}
+Este entorno de desarrollo permite migrar contratos a una \textit{Blockchain}, además con su consola dedicada permite interactuar con los contratos inteligentes \cite{trufflesuiteTruffleOverview}. Emplea el gestor de paquetes \textit{NPM}.
+
+\textit{Ganache} forma parte de esta \textit{Suite} y permite simular una \textit{Blockchain} en un entorno de desarrollo local. Dispone de versión \textit{GUI}\footnote{Graphic User Interface} aunque en este proyecto no se ha usado mucho, ya que me parece más cómodo utilizarlo directamente por consola.
+
+Esta herramienta fue muy usada al principio del desarrollo en conjunción a \textit{Ganache} para poder ejecutar los contratos en local, no obstante fue perdiendo importancia al final del desarrollo del \textit{backend}, este en parte provocado por las grandes ventajas que ofrecen los proveedores de nodos como \textit{Alchemy} en relación a este sistema.
+
+\subsection{\textit{Alchemy}}
+Este servicio satisface una de las necesidades básicas para interactuar con una \textit{Blockchain} real, el disponer de un nodo en la red\cite{alchemyWhatNode}.
+
+Es uno de los denominados proveedores de nodos, como veremos más adelante se tomó la decisión de emplear este, por sus ventajas durante el desarrollo y la facilidad para poner en producción una aplicación descentralizada, algo bastante complejo para un usuario desarrollando por su cuenta si no usara esta tecnología.
+
+\subsection{\textit{Nft.Storage}}
+Para resolver el problema de almacenamiento de archivos de gran tamaño en \textit{Blockchain} se empleó este servicio que permite almacenar los archivos empleando \textit{IPFS} y \textit{Filecoin}, nos permite guardar archivos de forma descentralizada y gratuita.
+
+Además, como se ha explicado anteriormente garantiza que estos archivos tampoco se modifiquen.
+
+Emplear un sistema para garantizar las dos condiciones expuestas anteriormente es prácticamente algo obligado para mantener la coherencia y las ventajas de la tecnología \textit{Blockchain}.
+
+\section{Herramientas para el desarrollo del \textit{frontend}}
+En este apartado se comentarán las herramientas empleadas en el desarrollo del \textit{frontend}.
+
+\subsection{\textit{TypeScript}}
+Este  \textit{superset}\cite{typescriptlangDocumentationBasics} de \textit{JavaScript} permite emplear tipos estáticos. La idea es que el código estrito en \textit{TypeScript} se compila a \textit{JavaScript}, pero al haber empleado las reglas de \textit{TypeScript} para garantizar el uso de tipos estáticos este código en \textit{JavaScript} nos va a garantizar que tiene una total resistencia a en empleo de variables de tipo incorrecto. 
+
+\imagen{tiposENSHC}{Ejemplo de uso de tipos en Second Hand Chain}{0.6}
+
+Podemos ver un ejemplo de este funcionamiento de los tipos de \textit{TypeScript} aplicado en este trabajo en la figura \ref{fig:tiposENSHC}
+
+Como desventajas podemos considerar, que para ciertos desarrolladores de  \textit{JavaScript} puede ser más complicada la adaptación. Aunque en mi caso ha resultado ser lo contrario ya que estoy más acostumbrado a lenguajes con tipos estáticos, como \textit{Java, C\# o C} y otros que también he empleado bastante como \textit{Python} igualmente permiten definir tipos a ciertas variables.
+
+
+\subsection{\textit{React} }
+Se emplea para crear las interfaces y toda la lógica relacionada con estas. Siguiendo el patrón de diseño MVC, de gran importancia en el desarrollo web,  el ámbito de \textit{React} se reduciría solamente a ser la vista. Otras características de  \textit{React} \cite{eswiki:149441191} son:
+\begin{itemize}
+    \item Está basado en componentes
+    \item Dom virtual, además del Dom del navegador \textit{React} tiene otro auxiliar en el que se interpretan los cambios de estado antes de transmitirlo al principal.
+    \item Las \textit{props} o propiedades es la forma de pasar datos entre diferentes componentes.
+    \item El estado de un componente representa como de encuentra en un determinado instante.
+    \item Los \textit{Hooks} permiten reutilizar gran cantidad de código, se deben declarar en los niveles superiores y en ningún caso dentro de porciones de código que se ejecuten de forma condicional o repetida.
+\end{itemize}
+
+Esta librería de \textit{JavaScript}, pese a que a veces es confundido con un \textit{framework} debido a su gran cantidad de características, permite renderizar los elementos en el \textit{DOM} empleando \textit{JSX} (o \textit{TSX} para \textit{TypeScript}). Básicamente lo que hace es transpilar este código a \textit{TypeScript/HTML}.
+
+\imagen{htmlReact}{Ejemplo código en \textit{HTML}. Extraido de \cite{transformHTML}}{0.8}
+
+\imagen{jsxReact}{Ejemplo código en \textit{JSX}. Extraido de \cite{transformHTML}}{0.8}
+
+En la figura \ref{fig:htmlReact}  podemos ver un sencillo código \textit{HTML}, convertido a \textit{JSX} en la figura \ref{fig:jsxReact}, sus principales diferencias y características son:
+\begin{itemize}
+    \item Solamente se puede devolver un elemento, por lo que el conjunto de todos los que formen en componente deben ir envueltos en uno único.
+    \item \textit{JSX} devuelve errores al no cerrar correctamente los elementos.
+    \item Las clases se definen con \textit{className} en vez de \textit{class}.
+    \item Se previenen ataques de inyección \cite{reactjsPresentandoReact} ya que se eliminan valores insertados antes de proceder al renderizado del componente.
+\end{itemize}
+
+\subsection{\textit{Vite}}
+\textit{Vite}\cite{vitejsVite} es una herramienta que permite compilar nuestros proyectos de forma muy rápida y prácticamente en tiempo real, permitiéndonos ver los cambios en nuestro proyecto instantáneamente.
+
+La alternativa para crear una aplicación \textit{React} habría sido emplear \textit{create React app}, no obstante esta tiene algunas desventajas, como que no es tan apropiada para proyectos medianos o pequeños ya que te añade muchas características que probablemente no se van a usar y además es más lento. Aun así \textit{create React app} también es una alternativa que está bastante bien y se podría haber usado en este proyecto\cite{devCreateReact}.
+
+Otra ventaja de usar \textit{Vite} es que está completamente integrada en \textit{Vercel}, permitiéndonos realizar los despliegues de la aplicación de forma muy rápida.
+
+\subsection{\textit{Vercel}}
+\textit{Vercel}\cite{vercelProjectsDeployments} nos permite desplegar nuestro proyecto de \textit{Vite} en una web lista para ser utilizada.
+
+Para ello normalmente puedes registrarte con tu cuenta de \textit{GitHub} y desplegar el proyecto a partir de los ficheros ahí desplegados. Además de esta forma quedará sincronizado con tu cuenta de \textit{GitHub} permitiendo que todas las mejoras realizadas en la \textit{branch} de producción se suban directamente al despliegue.
+
+Otra de las razones para emplear esta herramienta es que ofrece gratuitamente el mantenimiento de proyectos personales y que no requieran gran cantidad de carga como es el caso de Second Hand Chain.
+
+\subsection{\textit{Tailwind css}}
+Esta herramienta permite estilar las paginas web de forma rápida y eficiente. Su gran diferencia con otras alternativas como \textit{Bootstrap} es que sus clases están definidas entorno a cualidades y no a componentes. Este hecho permite ofrecer una gran cantidad de configuraciones para los distintos elementos y de eficiencia mucho mayor al generar directamente los estilos sobre \textit{CSS}.
+
+Además permite construir diseños \textit{responsive}\footnote{Diseño web adaptable a móviles o a otros dispositivos con distinto tamaño de pantalla} para dispositivos móviles de forma mucho más eficiente siguiendo principios de limpieza de código al establecer un sistema de \textit{breakpoints}, denominado \textit{mobile-first} para condicionar el uso o no de clases en un elemento \cite{tailwindcssResponsiveDesign}.
+
+\subsection{\textit{DaisyUi}}
+\textit{DaisyUi} es una librería de componentes ya diseñados para poder emplear. Su principal característica es que está completamente integrado con \textit{Tailwind css} permitiendo una interoperabilidad entre estas las clases predefinidas de ambas librerías.
+
+\imagen{tailwDaisy}{Ejemplo uso conjunto de \textit{Tailwind css} y \textit{DaisyUi}.}{1}
+
+Podemos ver en la figura \ref{fig:tailwDaisy} como se integran en las clases de los elementos en un ejemplo sacado de este mismo proyecto, las pertenencientes a \textit{Tailwind css} y a \textit{DaisyUi} configurando el diseño de ese componente.
+
+\subsection{\textit{Web3.js}}
+
+Este conjunto de librerías \cite{web3jsWeb3jsEthereum} nos permite interactuar con nuestro nodo en \textit{Ethereum}. Se ha empleado para hacer llamadas a los métodos de los contratos inteligentes desplegados en la \textit{Blockchain}.
+
+Además en las consultas que incluyan llamadas se deben firmar las transacciones, para ello necesitaremos la clave privada, con lo cual será necesario llamar a la \textit{wallet} instalada en nuestro navegador.
+
+\subsection{\textit{Metamask}}
+
+\textit{Metamask} \cite{metamaskHomeMetaMask} se podría describir como un gestor de nuestra clave pública y privada, va  a ser el encargado de interactuar con el usuario cuando se necesiten firmar transacciones. Además incluye una gran cantidad de características para asegurar la seguridad de ambas claves, por ello solicita contraseñas y frases de recuperación.
+
+Además \textit{Metamask} cuenta con una gran popularidad en la comunidad, por ello es la \textit{wallet} que se ha decidido emplear en este proyecto.
+
+\subsection{\textit{Node.js}}
+Finalmente destacar que se ha empleado este entorno de ejecución de \textit{JavaScript} \cite{nodejsNodejs}, es especialmente destacable ya que las dependencias anteriores se han instalado y gestionado usando el gestor de paquetes nativo de este entorno llamado \textit{NPM}.
+
+\section{Control de Versiones}
+
+Para gestionar el repositorio y sus diferentes versiones se ha empleado \textit{git} \cite{gitscm}. Este gestor de versiones permite seguir los cambios que ha habido a lo largo del tiempo en el proyecto. Para utilizar \textit{git} lo normal es emplear un servicio de \textit{hosting} para el repositorio, En este caso se han empleado dos:
+\begin{itemize}
+    \item \textit{GitLab}: Empleado como el principal durante la mayoría del desarrollo del proyecto, era de necesaria utilización debido a que este proyecto ha sido ofertado por el programa \textit{SCDS} de la empresa \textit{HP}, y su repositorio estaba \textit{hosteado} en este servicio. Se puede acceder (si tienes permisos) en: \url{https://gitlab.com/HP-SCDS/Observatorio/2022-2023/secondhandchain/ubu-secondhandchain}
+    \item \textit{GitHub}: Principalmente usado al final del proyecto, se migró a este servicio ya que en \textit{GitLab} estaba restringida la posibilidad de hacer público el repositorio al ser propiedad de \textit{HP}. Se encuentra en (Puede acceder cualquiera al ser público): \url{https://github.com/axelrg/second-hand-chain}
+\end{itemize}
+
+Utilizar un sistema de control de versiones es una característica clave en cualquier proyecto de \textit{software} ya que al tener los ficheros una gran complejidad y existir una gran cantidad de ellos cualquier cambio indeseado pude hacernos perder características y provocarnos el no saber volver  al versión anterior o ver cuales han sido los cambios realizados.
+
+Además tiene una gran influencia en otros aspectos como la metodología \textit{Scrum} ya que facilita el trabajo en equipo y el trabajo en diferentes \textit{features} por distintos desarrolladores al mismo tiempo mediante las  \textit{branch} y realizando un \textit{merge} posteriormente.
+
+\section{Otras herramientas utilizadas}
+\begin{itemize}
+    \item \textit{Overleaf}: Es un editor de \LaTeX \textit{online} que se ha empleado para redactar esta memoria y los anexos adjuntos.
+    \item \textit{VScode}: Es un editor de textos que ofrece a los usuarios la posibilidad de añadir extensiones, algunas de ellas amplían tanto la funcionalidad de este software que lo llegan a convertir en un pequeño \textit{IDE}.
+    \item \textit{EtherScan}: Esta web\cite{etherscanTESTNETSepolia} permite el seguimiento de las transacciones registradas en la \textit{Blockchain} \textit{Sepolia}, prácticamente es un estándar y todas las \textit{dApp} ofrecen seguir el estado de su transacción. Second Hand Chain no es una excepción en esto y podemos seguir las transacciones desde esta web.
+    \item \textit{Brave}: Permite abrir enlaces de \textit{IPFS} directamente, sin necesidad de \textit{gateway}.
+\end{itemize}

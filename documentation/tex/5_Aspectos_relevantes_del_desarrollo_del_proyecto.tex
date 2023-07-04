@@ -1,0 +1,142 @@
+\capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
+
+Durante este capítulo se van a exponer los aspectos más relevantes que se han producido a lo largo del proyecto. Para ello haré un repaso evaluando lo ocurrido en cada fase.
+
+\section{Fases iniciales}
+Nada más ver este \textit{TFG} propuesto por el Observatorio Tecnológico HP SCDS, me encantó la idea original que proponía un \textit{marketplace} de objetos de segunda mano basado en \textit{Ethereum}. En esta primera versión se proponía identificar estos objetos mediante un \textit{QR} que quedaría registado en \textit{Blockchain}.
+
+Tras investigar bastante sobre el funcionamiento de estas tecnologías, de las que yo no tenía muchos conocimientos inicialmente y a nivel técnico ninguno, me pareció mejor adaptar la idea al mercado de teléfonos de segunda mano, principalmente por estos motivos:
+\begin{itemize}
+    \item Registrar los teléfonos da a futuros compradores datos valiosos y verificados como las veces que ha sido vendido el teléfono, el histórico de precios o las característica.
+    \item Especializarse en un mercado aporta una gran cantidad de ventajas, ya que puedes ofrecer mejor servicio a los clientes.
+    \item Los teléfonos se pueden identificar por su \textit{IMEI} este es bastante más complicado de cambiar que un \textit{QR} que se puede perder o deteriorar con el uso. En cualquier caso, para cambiar el \textit{IMEI} tendrías que \textit{rootear} el teléfono, proceso que se puede saber si se ha realizado o no, además es una práctica en claro retroceso.
+    \item Para guardar los objetos en \textit{Blockchain} (aunque realmente en cualquier BBDD) se deben conocer las características del objeto, que se pueda vender cualquier cosa complica enormemente esta tarea y probablemente habría llevado a dejar características demasiado genéricas.
+    \item El mercado de teléfonos de segunda mano se encuentra en claro ascenso, solo hay que ver los precios de los teléfonos actualmente.
+    \item Los clientes gastan grandes cantidades de dinero en estos teléfonos, por lo que invertir en que sus datos sean más fiables para futuros compradores puede ser un coste asumible.
+\end{itemize}.
+Inicialmente se definieron una serie de ideas, de forma conjunta con los tutores, sobre las que se fueron construyendo los requisitos de la aplicación:
+\begin{itemize}
+    \item La aplicación consiste en un \textit{marketplace} para intercambiar \textit{NFTs} de teléfonos.
+    \item Los usuarios deben poder registrar estos teléfonos.
+    \item Los usuarios podrán vender y comprar teléfonos.
+    \item Habrá un tipo de usuario, sin \textit{wallet} que podrá consultar los teléfonos a la venta.
+\end{itemize}
+
+\imagen{sequenceDiagram}{Diagrama de secuencias inicial.}{0.9}
+\imagen{useCase}{Diagrama de casos de uso inicial.}{0.9}
+
+A partir de estas ideas se crearon unos diagramas UML de casos de uso, figura \ref{fig:useCase}, y de secuencias, figura \ref{fig:sequenceDiagram}, que cumplían con estos requisitos iniciales. Estos diagramas iniciales se pueden consultar en:
+\begin{itemize}
+    \item Diagrama inicial de secuencias: \url{https://github.com/axelrg/second-hand-chain/blob/main/ModelsUML/sequenceDiagram.drawio}
+    \item Diagrama inicial de casos de uso: \url{https://github.com/axelrg/second-hand-chain/blob/main/ModelsUML/useCaseDiagram.drawio}
+\end{itemize}
+Aunque posteriormente, como en cualquier proyecto real y precisamente por ello se emplea \textit{Scrum}, se fueron añadiendo otros como la posibilidad de retirar de la venta , cambiar el precio, emplear \textit{Etherscan}...
+
+Finalmente comencé con la configuración del repositorio, proceso que me dio algunos problemas al configurar la clave \textit{SSH} empleada para poder hacer \textit{clone} del repositorio de \textit{GitLab} y poder hacer \textit{push}. Durante este proceso configuré las cuentas de forma equivocada, motivo por el cual se pueden ver al principio del proyecto algunos \textit{commits} con cuentas mal escritas o la mía personal.
+
+\section{Desarrollo \textit{backend}}
+En este proyecto se definió que desde un primer momento que la aplicación debía estar basada en la \textit{Blockchain} \textit{Ethereum}. Por ello se hizo necesario aprender \textit{Solidity}, un lenguaje que debido a las particularidades que tiene \textit{Ethereum} incluye unos conceptos que son bastante distintos al resto de lenguajes:
+\begin{itemize}
+    \item Modificadores de acceso: Existen modificadores \cite{solidityesContratosx2014} para los métodos que son bastante diferentes a los normalmente empleados:
+    \begin{itemize}
+        \item \textit{View}: con este modificador describimos que una función solamente lee datos, no va a tener costes de gas.
+        \item \textit{Pure}: con este modificador describimos que un método no va ni a leer datos de \textit{Blockchain} ni a escribirlos, puede ser empleada para crear un función de sumar dos números pasados por parámetro.
+        \item \textit{Public}: El el modificador por defecto, permite acceder a una función internamente o externamente.
+        \item \textit{Private}: Solo es visible para el contrato y no para los contratos derivados.
+        \item \textit{External}: Pueden llamarse desde otro contrato y vía transacciones, para llamarlas dentro del contrato habría que usar "this.".
+        \item \textit{Internal}: Solo es visible para el contrato y  para los contratos derivados.
+         \item \textit{Payable}: para funciones que se van a llamar en transacciones a las que se les ha añadido \textit{Ether}.
+         \item \textit{Memory}:Datos guardados solo localmente.
+         \item \textit{Storage}:Datos guardados en \textit{Blockchain}.
+    \end{itemize}
+    \item Estos contratos van a lanzar eventos cuando se produzcan transacciones.
+    \item Funciones \textit{require}, verifican que se cumplen las condiciones.
+    \item Las listas tienen algunas diferencias, especialmente las de tamaño dinámico.
+\end{itemize}
+
+Por todas estas razones la adaptación a \textit{Solidity} puede resultar algo costosa. Para resolver este problema consulté varios recursos:
+\begin{itemize}
+    \item \textit{Cryptozombies}\cite{cryptozombiesCryptoZombiesAprende}: Es un recurso muy popular para aprender a programar en este lenguaje, la didáctica que emplea es excepcional, quizás la única pega podría ser que está algo obsoleto.
+    \item Guías de \textit{Truffle}\cite{trufflePetShop}: Estos recursos permiten adaptarse a la programación en este lenguaje y al uso de \textit{Truffle}.
+    \item Documentación de \textit{Solidity}.
+\end{itemize}
+
+Otra de las características importantes a destacar es la implementación de los contrato siguiendo el estándar \textit{ERC721}\cite{erc721}, el estándar para \textit{NFTs}. Su implementación es clave ya que este estándar permite que los contratos puedan interactuar entre sí, además terceros podrán adaptar sus códigos fácilmente al saber que lo empleas.
+
+\imagen{erc721transfer}{Implementación de uno de los métodos de \textit{IERC721} correspondiente a la transferencia del token \textit{NFT}. }{0.7}
+
+A nivel técnico, como podemos ver en la figura \ref{fig:erc721transfer} consiste en la implementación de unos métodos comunes a lo largo de estas aplicaciones que deben implementar la interfaz \textit{IERC721}.
+
+Además incluye unos métodos para dar permisos a un tercero para transferir ese \textit{token}. En el caso de la implementación de Second Hand Chain, cuando se pone un \textit{NFT} a la venta, para que sea automáticamente transferido en el momento en el que produce el pago al propietario, se ha dado permisos a la dirección del contrato para poder transferirlo. De esta forma el código del contrato garantiza que la transferencia del \textit{token} solo se produce si hay pago.
+
+Esto da una solución al problema de desconfianza generado entre las dos partes en cuanto a que quién haga la transferencia primero puede quedarse sin su objeto de valor. De esta forma, queda garantizado por el contrato digital que esto nunca se va a producir.
+
+Otro de los problemas que fueron resueltos fue el encontrar una red \textit{Blockchain} adecuada para desplegar el ya casi finalizado contrato. Tras buscar bastantes opciones vi que desplegarlo en la red principal iba a ser imposible por los costes de gas. No obstante, \textit{Ethereum} ofrece para los desarrolladores redes de prueba, siendo \textit{Sepolia} la disponible en este momento.
+
+Estas redes a efectos prácticos se comportan exactamente igual que la principal pero sus \textit{Ether} se pueden obtener de forma gratuita. Además, para que no se conviertan en redes \textit{Blockchain} para especular, tienen una vida útil de unos seis años, por lo que \textit{Sepolia} seguirá viva hasta el uno de enero de 2027 al ser creada al final de 2021.
+
+Finalmente, según se iba finalizando el desarrollo de la parte de \textit{backend} iba surgiendo el problema de comunicar el contrato, el cual iba a ser desplegado en la \textit{testnet Sepolia},  con el futuro \textit{frontend}. A raíz de investigar, encontré que para ello iba a ser necesario disponer de un nodo en \textit{Ethereum Sepolia}. Por ello, comparé los diferentes proveedores de nodos\cite{ethereumNodesService} y llegue a la conclusión de que \textit{Alchemy} ofrecía el mejor servicio.
+
+El modelo que seguí fue la obtención de una \textit{API Key}\cite{alchemyAlchemyQuickstart} de \textit{Alchemy} para tener un dirección a la que mandar las peticiones, que pueden ser solamente de información al nodo, o transacciones firmadas para registrar en \textit{Sepolia}.
+
+En resumen, el objetivo era poder desplegar el contrato en \textit{Blockchain} para poder realizar un \textit{frontend} basado en una red real y que fuese totalmente funcional de cara al usuario que va a probar la aplicación.
+
+No obstante, lograr esto en la red principal, aún habiendo esperado a desplegar la versión final del contrato, habría tenido unos costes prohibitivos. Estamos hablando de miles de euros, entre despliegue de los contratos y los costes de probar la aplicación. Además, los usuarios tendían que comprar \textit{Ether} para registrar teléfonos y operar con ellos.
+
+Finalmente, cuando se decidió añadir imágenes a las tarjetas surgió el problema de cómo almacenar esas imágenes. Dado que eran ficheros muy grandes, además no hay forma fácil de guardarla en \textit{Sepolia}, ya que los contratos tienen muy limitados los tipos.
+
+Esto nos habría obligado a trasformar la imagen a texto, probablemente bit a bit, y de haberlo hecho así nos cerraríamos la puerta a poder escalar la aplicación en un futuro a la \textit{mainnet}, al tener en esta un coste desmesurado el almacenar tantos datos.
+
+La solución encontrada fue emplear el servicio \textit{NFT.storage} que a través de \textit{IPFS} y \textit{Filecoin} permite guardarlas garantizando los siguientes principios:
+
+\begin{itemize}
+    \item Los archivos van a ser inmutables.
+    \item Estos archivos se guardan en una red descentralizada.
+\end{itemize}
+
+Por ello el proceso seguido será:
+
+\begin{enumerate}
+    \item Se suben los archivos a \textit{NFT.storage} que a su vez los almacena en \textit{IPFS} y \textit{Filecoin}.
+    \item Este servicio nos devuelve el denominado \textit{CID}, que básicamente va a ser un \textit{hash} formado a partir del fichero subido y que va a definir su ruta.
+    \item Con este \textit{CID} procedemos a crear nuestro \textit{NFT}, de esta forma estamos garantizando que toda la información sea coherente e inmutable en el proceso.
+    \item A la hora de recuperar la información empleamos el \textit{CID} que forma parte de los datos del \textit{NFT}, podemos acceder a esta información mediante un navegador que admita \textit{IPFS}, cómo \textit{Brave}.
+    \item Para recuperar la información desde otros navegadores se puede emplear un \textit{gateway} como el que se emplea, propiedad también de  \textit{NFT.storage}.
+\end{enumerate}
+
+Encontrar una solución a este problema era de vital importancia, ya que realizar parte del \textit{backend} en \textit{Blockchain} y otra parte en una base de datos estándar no me parecía que tuviese mucho sentido, al acabar condicionado por las desventajas que ofrecen unas y otras.
+
+\section{Desarrollo \textit{Frontend}}
+
+Tras terminar con las versiones iniciales de los contratos comencé con el desarrollo del \textit{frontend}, para ello decidí usar \textit{React}, una librería de \textit{Javascript}.
+
+Uno de las mayores complicaciones en el desarrollo del \textit{frontend} fue su integración con los contratos. Para ello decidí emplear una librería llamada \textit{Web3.js}, que permite construir las transacciones, solicitar que sean firmadas a la \textit{wallet} y enviarlas posteriormente al nodo de \textit{Sepolia}.
+
+\imagen{putOnSale}{Creación de una transacción}{0.7}
+
+En la figura \ref{fig:putOnSale} podemos ver como se define una transacción para poner a la venta un teléfono, en los campos de emisor y receptor se debe definir el emisario del mensaje y el receptor de la transacción. Al ser un método de un contrato, el receptor va a ser la dirección del contrato. Las dos direcciones son claves públicas tanto la del usuario como la del contrato.
+
+Posteriormente llamamos al método que permite que \textit{Metamask} solicite firmar al usuario la transacción y se envíe. Además, al realizar este último proceso esperamos a tener un \textit{hash} de la transacción que permitirá al usuario realizar el seguimiento de esta desde \textit{Etherscan}.
+
+Como todas estas operaciones son asíncronas, hay que trabajar con los condicionantes que ello conlleva, además me resultó bastante complejo encontrar con el formato correcto para construir la transacción al no haber gran cantidad de información respecto a este tema, y aún menos si el despliegue es en \textit{Blockchins} reales.
+
+\section{Despliegue}
+
+Otro de los aspectos relevantes a destacar es el proceso de despliegue de los contratos en \textit{Blockchins} reales, difiere bastante de realizarlo en \textit{Ganache} (en local), donde cuentas con las facilidades que ofrece la consola de \textit{Truffle}.
+
+\imagen{deployment}{Fichero para desplegar y relacionar los contratos que heredan entre ellos}{0.9}
+
+Podemos ver en la figura \ref{fig:deployment} en que orden se va a producir el despliegue de los contratos, este debe ser obligatoriamente así, ya que si no, no se van a heredar las variables de uno a otro, lo cual causaría el no funcionamiento de ellos. Considero que este aspecto es reseñable ya que fue uno de los problemas que me encontré, desplegaba los contratos, pero resultaba que después no se comunicaban entre ellos. Esto se debió a que la mayoría de despliegues descritos en diferente documentación  no cuentan más que con uno o dos contratos.
+
+
+\imagen{trufconfig}{Fichero para configurar el despliegue en una \textit{Blockchain} real}{0.9}
+
+En la figura \ref{fig:trufconfig} podemos ver como debe ser la configuración para el despliegue de la aplicación en \textit{Sepolia}:
+\begin{itemize}
+    \item Necesitamos pasar la clave privada de nuestra cuenta, desplegar los contratos tiene un gran coste, por ello hay que asegurarse de disponer de suficiente  \textit{Ether}.
+    \item Para mandar esta información al nodo hay que llamarle, para lo cual necesitamos la \textit{API Key}.
+    \item Se especifica el identificador de red de \textit{Sepolia}.
+    \item Número de bloques a ser minados antes de que la transacción caduque.
+\end{itemize}
+
+Este fichero\footnote{\textit{truffle-config.js}}, se puede ver que existe en el repositorio hasta más o menos el momento en el que se produce el primer despegue en \textit{Sepolia}, momento en el que, por razones obvias, fue eliminado y añadido a \textit{.gitignore}.

@@ -1,0 +1,104 @@
+\apendice{Documentación de usuario}
+
+\section{Introducción}
+En este anexo se explica todo lo que necesita el usuario para utilizar la aplicación, y se explica el funcionamiento de la misma, aunque también cuente como soporte con los vídeos de la aplicación.
+
+\section{Requisitos de usuarios}
+A continuación, se exponen los requisitos necesarios para poder utilizar la aplicación:
+\begin{itemize}
+    \item Tener instalada la extensión de navegador \textit{Metamask}.
+    \item Es preferible usar \textit{Brave} como navegador aunque al estar basado en \textit{Chromium} no hay problemas en emplear cualquier otro que emplee esa base de código abierto.
+    \item Para usuarios de dispositivos móviles tener instalada la aplicación \textit{Metamask}.
+\end{itemize}
+
+\section{Instalación}
+Los usuarios deberán añadir la extensión \textit{Metamask} a su navegador, en la web desplegada hay un vídeo con el proceso de instalación, también se encuentra en el repositorio y en los USB entregados, en los ficheros públicos de la aplicación web.
+
+Por otro lado, para poder realizar transacciones los usuarios necesitan \textit{Ether} de la red \textit{Sepolia}, pueden obtenerlos registrándose en \textit{Alchemy} y recurriendo a su \textit{Faucet} (como se muestra en el segundo vídeo en la página web) o los pueden pedir al autor por correo aportando la dirección de su \textit{wallet}.
+
+\section{Manual del usuario}
+Finalmente en esta sección vamos a detallar el funcionamiento de la aplicación Second Hand Chain para que los usuarios puedan comprender su funcionamiento detalladamente:
+
+\imagen{anexos/vistaInicial}{Vista inicial de la aplicación.}
+
+En la figura \ref{fig:anexos/vistaInicial} podemos destacar los siguientes apartados:
+\begin{enumerate}
+    \item Botón que nos lleva a la vista actual de presentación de la aplicación.
+    \item Botón que abre el modal para registrar teléfonos.
+    \item Botón para acceder a los teléfonos que posee el usuario.
+    \item Botón para acceder a los teléfonos en venta.
+    \item Botón que indica el estado de conexión con \textit{Metamask}.
+    \item Ventana para iniciar sesión en \textit{Metamask}, aparece si acabas de abrir tu navegador y tienes \textit{Metamask} instalado, permite iniciar sesión, proceso necesario para poder firmar transacciones.
+    \item Descripción de la aplicación.
+    \item Vídeo para mostrar como añadir \textit{Metamask}.
+    \item Vídeo para mostrar como añadir \textit{Ether} a \textit{Metamask} gracias al \textit{faucet} de \textit{Alchemy} y demostración del funcionamiento de la aplicación.
+    \item Botón para acceder al repositorio de \textit{GitHub}.
+    \item Listado de tecnologías empleadas en el proyecto.
+\end{enumerate}
+
+\imagen{anexos/vistatarjeta}{Vista de tarjetas de teléfonos.}
+
+En la figura \ref{fig:anexos/vistatarjeta} podemos ver un par de tarjetas de teléfonos:
+\begin{enumerate}
+    \item Modelo y marca del teléfono.
+    \item Características del teléfono.
+    \item Botón de compra, permite acceder a los detalles, en el caso de los teléfonos en propiedad aparecerá simplemente la palabra detalles.
+    \item Características del teléfono.
+    
+\end{enumerate}
+
+\imagen{anexos/vistadetalles}{Vista de detalles de teléfonos.}
+
+En la figura \ref{fig:anexos/vistadetalles} podemos ver un modal con los detalles del teléfono:
+\begin{enumerate}
+    \item Modelo y marca del teléfono.
+    \item Características del teléfono.
+    \item Historial de acciones de compraventa, siendo la de índice cero la del registro del teléfono.
+    \item Botón de compra, puede aparecer deshabilitado si no iniciamos sesión, habilitado para poderlo comprar o no aparecer, en el caso de acceder desde teléfonos en propiedad.
+\end{enumerate}
+
+\imagen{anexos/vistadetalles2}{Vista de detalles de teléfonos en propiedad, parte para configurar el estado del teléfono.}
+
+En la figura \ref{fig:anexos/vistadetalles2} podemos ver un segmento del modal con las opciones a configurar por un propietario para poner a la venta el teléfono:
+\begin{enumerate}
+    \item Si el teléfono está a la venta o no y su precio, en caso de estarlo.
+    \item Campo para introducir el precio por el teléfono.
+    \item Botón de cambiar de precio si está a la venta o de poner en venta si no lo estaba.
+    \item Botón de retirar de la venta, solo aparece si se vende el teléfono.
+\end{enumerate}
+
+\imagen{anexos/vistatransaccion}{Vista de transacción de compra de teléfono.}
+
+En la figura \ref{fig:anexos/vistatransaccion} podemos ver el proceso para comprar un teléfono:
+\begin{enumerate}
+    \item Se hace clic en el botón de compra por el cual nos aparece un modal de \textit{Metamask} solicitando que firmemos la transacción.
+    \item Podemos ver la cuenta con la que vamos a firmar la transacción.
+    \item Estamos en la \textit{testnet Sepolia}.
+    \item El método que vamos a ejecutar, en este caso es detectado al pertenecer a \textit{ERC721}.
+    \item Valor de \textit{Ether} que vamos a aportar.
+    \item \textit{Gas fees}.
+    \item \textit{Valor total de \textit{Ether} que se va a emplear.}
+\end{enumerate}
+Finalmente confirmaríamos la transacción.
+
+\imagen{anexos/viewlink}{Vista de transacción de compra de teléfono.}
+
+En la figura \ref{fig:anexos/viewlink} podemos ver el mensaje con un enlace para abrir la transacción realizada en \textit{Etherscan}.
+
+\imagen{anexos/viewetherscan}{Vista de la transacción de compra realizada en \textit{Etherscan}.}
+
+La figura \ref{fig:anexos/viewetherscan} nos muestra los detalles de la transacción previamente realizada, en \textit{Etherscan}, vamos a ver sus detalles:
+\begin{enumerate}
+    \item Nos recuerda que la transacción pertenece a la \textit{testnet Sepolia}.
+    \item El \textit{hash} de la transacción.
+    \item Estamos en la \textit{testnet Sepolia}.
+    \item Momento en el que se minó el bloque al que pertenece nuestra transacción.
+    \item Dirección origen, la del comprador.
+    \item Dirección con la que ha interactuado la anterior, la de nuestro contrato inteligente.
+    \item Nos detecta que es un token en cuyo contrato inteligente se implementa la interfaz \textit{IERC721}
+    \item Identificador del token transferido.
+    \item Descripción del contrato.
+    \item Antiguo propietario del \textit{NFT}.
+    \item Nuevo propietario del \textit{NFT}.
+    \item Valor en \textit{Ether} transferido.
+\end{enumerate}

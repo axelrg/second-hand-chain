@@ -1,0 +1,293 @@
+\apendice{Especificación de Requisitos}
+
+\section{Introducción}
+
+En este apéndice se van a listar los requisitos que satisface la aplicación que forma parte de este proyecto. Aunque los requisitos se definieron en la fase de diseño de la aplicación este listado ha sido ampliado según se desarrollaba la aplicación.
+
+
+\section{Objetivos generales}
+A continuación se adjunta un listado de los objetivos principales de la aplicación:
+\begin{itemize}
+    \item Crear un \textit{marketplace} que permita a los usuarios vender y comprar \textit{NFT}.
+    \item Desplegar los contratos en la \textit{Blockchain} \textit{Ethereum} o una de sus \textit{testnets}.
+    \item Aportar a los usuarios información que por sus características de inmutabilidad respaldada por \textit{Ethereum} aporte valor a sus productos.
+    \item Acercar las tecnologías \textit{Blockchain} a un mayor numero de usuarios.
+    \item Crear un aplicación web que aporte una experiencia lo más accesible posible a estas tecnologías \textit{Blockchain}.
+    
+\end{itemize}
+
+\section{Catalogo de requisitos}
+
+En esta sección se incluye un listado con todos los requisitos que debe cumplir la aplicación:
+
+\subsection{Requisitos Funcionales}
+\begin{itemize}
+    \item \textbf{RF1-Gestión de \textit{wallet}}: El usuario deberá poder iniciar sesión en la aplicación desde la extensión de \textit{Metamask} de su navegador, si tiene la \textit{wallet} instalada le aparecerá directamente para iniciar sesión, si no, se mostrarán los correspondientes mensajes de aviso.
+    \item \textbf{RF2-Gestión de usuario sin \textit{wallet}}: Un usuario que no cuente con \textit{wallet} instalada podrá usar la aplicación para consultar teléfonos a la venta y características. Además de la \textit{landing page} en la cual podrá consultar cómo añadir esta extensión si lo deseara.
+    \item \textbf{RF3-Creación de teléfonos}: Se debe poder registrar los teléfonos en \textit{Blockchain}, para ello el usuario deberá introducir todos sus datos además de una imagen. No se podrá registrar un teléfono con un IMEI ya registrado.
+    \item \textbf{RF4-Gestión de teléfonos}: Los usuarios registrados deben poder ver los teléfonos que les pertenecen, además, podrán acceder al mercado de teléfonos en venta.
+    \item \textbf{RF5-Gestión de ventas}: Los usuarios deben ser capaces de gestionar el estado en que se encuentren sus teléfonos, si se venden o no.
+    \begin{itemize}
+        \item \textbf{RF5.1-Puesta a la venta}: Los usuarios pueden poner a la venta los teléfonos previamente registrados.
+        \item \textbf{RF5.2-Cambio de precio}: Dado un teléfono que está en venta su propietario podrá cambiar su precio de venta.
+        \item \textbf{RF5.2-Retirada de la venta}: Dado un teléfono que está en venta su propietario podrá retirarlo de la venta.
+    \end{itemize}
+    \item \textbf{RF6-\textbf{Seguimiento de transacciones por \textit{Etherscan}}}: Se requiere que por cada por cada operación que implique realizar una transacción en \textit{Blockchain}, el usuario, tras firmar dicha transacción, dispondrá de un enlace que le permitirá seguir su estado a través de \textit{Etherscan}.
+    \item \textbf{RF7-Compra de teléfonos}: Los usuarios deben poder comprar los teléfonos, para realizar esta operación aportarán el \textit{Ether} correspondiente a la transacción , siempre y cuando este teléfono no les pertenezca ya.
+\end{itemize}
+
+\subsection{Requisitos No Funcionales}
+\begin{itemize}
+    \item \textbf{RNF1-Seguridad}: Se requiere que la aplicación ofrezca un entorno seguro para el usuario y no suponga ningún riesgo para sus datos el uso de ella.
+    \item \textbf{RNF2-Disponibilidad}: Se requiere que la aplicación esté disponible constantemente excepto en sus periodos de mantenimiento.
+    \item \textbf{RNF3-Usabilidad}: Se requiere que la aplicación ofrezca la mejor experiencia posible al usuario. Además, es necesaria la correcta visualización de la aplicación desde teléfonos móviles, por lo tanto, los elementos en pantalla que sean necesarios se adaptarán dinámicamente para estas pantallas.
+    \item \textbf{RNF4-Confiabilidad}: Se requiere que la aplicación cumpla todos los requisitos que se establecen en estos anexos.
+    \item \textbf{RNF5-Eficiencia}: Se requiere que la aplicación haga un uso eficiente de los recursos de la máquina que lo vaya a ejecutar.
+    \item \textbf{RNF6-Privacidad}: Se requiere que la aplicación haga un uso responsable de los datos de los usuarios, en este caso de su clave privada, dato que no debe ser conocido por nadie excepto el propio usuario.
+    \item \textbf{RNF7-Mantenibilidad}: La aplicación debe aplicar las mejores prácticas posibles para facilitar el mantenimiento durante todo el ciclo de vida de la aplicación.
+\end{itemize}
+
+
+\section{Especificación de requisitos}
+
+\subsection{Diagrama de casos de uso}
+\imagen{anexos/dicu}{Diagrama de casos de uso}
+
+% Caso de Uso 1 -> Consultar Experimentos.
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-1}    & \textbf{Inicio de sesión en \textit{Metamask}}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF-1 \\
+		\textbf{Descripción}          & En este caso de uso el usuario iniciará sesión en \textit{Metamask} \\
+		\textbf{Precondición}         & El usuario no ha iniciado sesión en \textit{Metamask} y tiene la extensión instalada \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Le aparece una ventana emergente para iniciar sesión en \textit{Metamask}.
+                \item El usuario introduce su contraseña.
+                \item El usuario selecciona la wallet con la que quiere operar.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Que \textit{Metamask} mantenga esa sesión iniciada \\
+		\textbf{Excepciones}          & \textit{Metamask} no se encuentra instalado o se ha cerrado la ventana emergente \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-1 Inicio de sesión en \textit{Metamask}.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-2}    & \textbf{Usuario sin \textit{Metamask} accede a los teléfonos en venta}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF2 \\
+		\textbf{Descripción}          & En este caso de uso el usuario sin \textit{Metamask} consultará los teléfonos a la venta.  \\
+		\textbf{Precondición}         & El usuario no ha iniciado sesión en \textit{Metamask} o no tiene la extensión instalada. \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Hace clic en teléfonos en venta.
+                \item Si está en pantalla pequeña clic en el \textit{dropdown} y después en en teléfonos en venta.
+                \item El usuario puede visualizar los teléfonos a la venta.
+                \item El usuario accede a un teléfono y no podrá comprarlo, le aparece un mensaje diciendo que inicie sesión justamente en el botón.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Ninguna \\
+		\textbf{Excepciones}          & Ninguna \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-2 Usuario sin \textit{Metamask} accede a los teléfonos en venta.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-3}    & \textbf{Creación de teléfonos}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF3 y RF6 \\
+		\textbf{Descripción}          & En este caso de uso el usuario con \textit{Metamask} registrará un teléfono  \\
+		\textbf{Precondición}         & El usuario ha iniciado sesión en \textit{Metamask} \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Hace clic en crear teléfono.
+                \item Rellena los datos necesarios y selecciona un archivo.
+                \item Hace clic en crear teléfono.
+                \item La extensión de \textit{Metamask} le solicita firmar la transacción, lo cual acepta.
+                \item Le aparece un mensaje para seguir la transacción en \textit{Etherscan}.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El teléfono se registra correctamente en \textit{Blockchain} \\
+		\textbf{Excepciones}          & No se ha iniciado sesión, no hay fondos o no se han rellenado los datos \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-3 Creación de teléfonos.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-4}    & \textbf{Gestión de teléfonos}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF4 \\
+		\textbf{Descripción}          & En este caso de uso el usuario con \textit{Metamask} consultará los datos de todos los teléfonos  \\
+		\textbf{Precondición}         & El usuario ha iniciado sesión en \textit{Metamask} \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Hace clic en sus teléfonos.
+                \item Puede consultar los datos del teléfono.
+                \item Hace clic en teléfonos en venta.
+                \item Puede acceder a todos los teléfonos que se están vendiendo.
+                \item Consulta las características de cualquiera de ellos.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & Ninguna \\
+		\textbf{Excepciones}          & Ninguna \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-4 Gestión de teléfonos.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-5}    & \textbf{Puesta a la venta}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF51 y RF6 \\
+		\textbf{Descripción}          & En este caso de uso el usuario con \textit{Metamask} podrá poner un teléfono a la venta  \\
+		\textbf{Precondición}         & El usuario ha iniciado sesión en \textit{Metamask} y tiene teléfonos \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Hace clic en sus teléfonos.
+                \item Selecciona uno.
+                \item Define un precio de venta y hace clic en el botón.
+                \item La extensión de \textit{Metamask} le solicita firmar la transacción, lo cual acepta.
+                \item Le aparece un mensaje para seguir la transacción en \textit{Etherscan}.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La puesta a la venta se registra correctamente en \textit{Blockchain} \\
+		\textbf{Excepciones}          & No se ha iniciado sesión, no hay fondos o no se han rellenado los datos \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-5 Puesta a la venta de teléfono.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-6}    & \textbf{Cambio de Precio}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF52 y RF6 \\
+		\textbf{Descripción}          & En este caso de uso el usuario con \textit{Metamask} podrá poner un teléfono a la venta  \\
+		\textbf{Precondición}         & El usuario ha iniciado sesión en \textit{Metamask} y tiene teléfonos en venta \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Hace clic en sus teléfonos.
+                \item Selecciona uno en venta.
+                \item Define un precio de venta y hace clic en el botón.
+                \item La extensión de \textit{Metamask} le solicita firmar la transacción, lo cual acepta.
+                \item Le aparece un mensaje para seguir la transacción en \textit{Etherscan}.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & El cambio de precio se registra correctamente en \textit{Blockchain} \\
+		\textbf{Excepciones}          & No se ha iniciado sesión, no hay fondos o no se han rellenado los datos \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-6 Cambio de Precio.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-7}    & \textbf{Retirar de la venta}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF53 y RF6 \\
+		\textbf{Descripción}          & En este caso de uso el usuario con \textit{Metamask} podrá poner un teléfono a la venta  \\
+		\textbf{Precondición}         & El usuario ha iniciado sesión en \textit{Metamask} y tiene teléfonos en venta \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Hace clic en sus teléfonos.
+                \item Selecciona uno en venta.
+                \item Se hace click en retirar.
+                \item La extensión de \textit{Metamask} le solicita firmar la transacción, lo cual acepta.
+                \item Le aparece un mensaje para seguir la transacción en \textit{Etherscan}.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La retirada de la venta se registra correctamente en \textit{Blockchain} \\
+		\textbf{Excepciones}          & No se ha iniciado sesión, no hay fondos o no se han rellenado los datos \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-7 Retirar de la venta.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CU-8}    & \textbf{Compra}\\
+		\toprule
+		\textbf{Versión}              & 1.0    \\
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Requisitos asociados} & RF7 y RF6 \\
+		\textbf{Descripción}          & En este caso de uso el usuario con \textit{Metamask} comprará un teléfono  \\
+		\textbf{Precondición}         & El usuario ha iniciado sesión en \textit{Metamask} y tiene fondos \\
+		\textbf{Acciones}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+			\item Hace clic en teléfonos en venta.
+                \item Selecciona uno en venta que no le pertenezca.
+                \item Se hace click en comprar.
+                \item La extensión de \textit{Metamask} le solicita firmar la transacción, lo cual acepta.
+                \item Le aparece un mensaje para seguir la transacción en \textit{Etherscan}.
+		\end{enumerate}\\
+		\textbf{Postcondición}        & La compra se registra correctamente en \textit{Blockchain} \\
+		\textbf{Excepciones}          & No se ha iniciado sesión o no hay fondos \\
+		\textbf{Importancia}          & Alta \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CU-8 Compra.}
+\end{table}

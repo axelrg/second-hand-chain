@@ -1,0 +1,188 @@
+\apendice{Plan de Proyecto Software}
+
+\section{Introducción}
+
+En este capítulo se va a exponer cómo se ha planeado el proyecto y cómo se ha llevado a cabo dentro de cada uno de los apartados.
+
+\section{Planificación temporal}
+La gestión de este proyecto se ha realizado empleando la metodología \textit{Scrum}. Por ello, se celebraba con los tutores el \textit{sprint review}, una reunión para revisar todo el trabajo realizado y resolver posibles dudas, esta era realizada con una frecuencia de dos semanas, coincidiendo con el final e inicio de \textit{sprint} .
+
+Para la clasificación de \textit{issues} se ha empleado un sistema que los divide por las siguientes etiquetas para poder facilitar mejor su identificación:
+\begin{enumerate}
+    \item \textit{Backend}: Empleada para \textit{issues} relacionadas con el \textit{backend}, predomina durante la primera mitad del proyecto, fase en la que se estaban creando los contratos digitales.
+    \item \textit{Blockchain}: Se ha usado para \textit{issues} relacionadas con la tecnología \textit{Blockchain}, predomina durante la primera mitad del proyecto, suele ir asociada a la de \textit{Backend}.
+    \item \textit{Bug}: Al final del proyecto se pudieron detectar varios pequeños errores en el \textit{Frontend}. Para dar más visibilidad a esas tareas se creó esta etiqueta.
+    \item \textit{Frontend}: Durante la segunda mitad del proyecto el desarrollo se centra en el \textit{Frontend} por lo que es cuando comienza a tomar protagonismo.
+    \item \textit{Management}: Etiqueta relacionada con actividades de la gestión de tareas.
+    \item \textit{Research}: Para tareas que incluyen investigación para conocer cómo realizar dicha tarea.
+    \item \textit{Software engineering}: Para las actividades realizadas durante las fases de diseño inicial de la aplicación.
+\end{enumerate}
+
+\subsection{Sprint 1: Inicio del proyecto}
+
+\imagen{anexos/sprint1}{Tareas finalizadas en el Sprint 1}
+
+En este primer sprint transcurrió entre el 24-02-2023 y el 10-03-2023  se realizo una primera toma de contacto con el proyecto, consistió en investigar el funcionamiento de \textit{Blockchain}. Además, se comenzó a aprender a usar \textit{GitLab} para realizar la gestión de tareas durante el proyecto. Finalmente, se realizaron unos primeros diagramas UML a partir de los requisitos ideados en la reunión incial del proyecto. Podemos ver todas estas tareas con sus etiquetas en la figura \ref{fig:anexos/sprint1}.
+
+\subsection{Sprint 2: Configuraciones iniciales y primera iteración del \textit{smart contract}}
+
+\imagen{anexos/sprint2}{Tareas finalizadas en el Sprint 2}
+
+En este segundo \textit{sprint}, el cual transcurrió entre el 11-03-2023 y el 24-03-2023, se comenzó a configurar el repositorio de GitLab, al cual solo se podía acceder mediante clave SSH, por ello tuve que configurar una y después resolver unos cuantos problemas que me daban las cuentas de \textit{git}.
+
+A partir de entonces, ya con el repositorio configurado, comencé a formarme en \textit{Solidity}, un lenguaje que debido a las características de \textit{Blockchain} tiene una serie de particularidades que deben ser bien comprendidas para empezar a emplearlo. Después de realizar esta tarea, se creó un primer \textit{smart contract} que permitía el registro de teléfonos y definía inicialmente cómo se iban a almacenar estos datos.
+
+\subsection{Sprint 3: Adaptación del \textit{smart contract} al estándar \textit{ERC721}}
+
+Transcurrido entre el 25-03-2023 y el 14-04-2023 se continuó con el desarrollo del \textit{smart contract}, se implementaron nuevos \textit{getters}, proceso que es distinto al empleado en otros lenguajes ya que se debe guardar en en local el \textit{array} para estos métodos \textit{view} (sin coste al solo consultar información) y por ello debes almacenar el número de objetos que vas a añadir a esa lista que debe conocer de antemano el tamaño que va a tener al instanciarla, no es dinámica como los \textit{arrays} en \textit{storage}.
+
+\imagen{anexos/sprint3}{Tareas finalizadas en el Sprint 3}
+
+Además, aunque de esto no se pudo hacer \textit{commit} al detectar un error que se tuvo que preguntar a los tutores, se comenzó con la implementación de la interfaz \textit{IERC721}, el estándar para gestionar traspasos de \textit{NFTs}.
+
+\subsection{Sprint 4: Continuación de la adaptación al estándar \textit{ERC721}}
+
+Entre el 15-04-2023 y el 21-04-2023, este sprint fue solo de una semana (el anterior de tres) por problemas de horarios por la semana santa, se resolvió el error descrito anteriormente que se debía a un problema con las versiones del compilador de \textit{Solidity}.
+
+\imagen{anexos/sprint4}{Tareas finalizadas en el Sprint 4}
+
+Además, se finalizó del desarrollo de las características básicas necesarias a implementar en los \textit{smart contract}. Para la implementación del estándar \textit{ERC721} se crearon otros métodos que no se iban a usar en Second Hand Chain, principalmente los correspondientes a dar permisos a terceros para transferir el token, para dejar la puerta abierta en un futuro a su uso por otras aplicaciones.
+
+Hasta esta fase, se había usado la consola de \textit{Truffle} y \textit{Ganache} para comprobar el correcto funcionamiento de estos \textit{smart contract}, es decir, funcionaban correctamente n el entorno de desarrollo local.
+
+\subsection{Sprint 5: Inicio del desarrollo del \textit{frontend}}
+
+
+En este sprint, entre el 22-04-2023 y el 5-05-2023,  se desarrolla todo lo relacionado con el despliegue del \textit{backend} en \textit{Sepolia} y el inicio del \textit{frontend}.
+
+\imagen{anexos/sprint5}{Tareas finalizadas en el Sprint 5}
+
+Se toma la decisión de migrar en este momento el contrato a la \textit{testnet} para facilitar el desarrollo y evitar posibles problemas de integración si el despliegue se produce con el \textit{frontend} ya terminado.
+
+En consecuencia, se inicia el proyecto de \textit{React}, en el cual se empieza implementando un \textit{custom hook} para obtener los móviles y se empieza con el diseño de un modal para crear teléfonos.
+
+\subsection{Sprint 6: Continuamos con el \textit{frontend}}
+
+
+
+En el sprint que transcurre entre el 6-05-2023 y el 26-05-2023 se continúa con el desarrollo del \textit{frontend},  tras el cual se va a permitir que los usuarios puedan consultar los teléfonos a la venta y los teléfonos propios, siempre y cuando se tenga \textit{wallet} y teléfonos registrados.
+
+\imagen{anexos/sprint6}{Tareas finalizadas en el Sprint 6}
+
+El otro tipo de usuario, el que no dispone de \textit{wallet}, podrá consultar los teléfonos a la venta aunque no podrá ni crear ni comprar.
+
+\subsection{Sprint 7: Llegamos al producto mínimo viable}
+
+
+
+En este sprint se alcanzó el producto mínimo viable, transcurrió ente el 27-05-2023 y el 9-06-2023. Se implementaron todas las funciones necesarias para cumplir todos los requisitos funcionales de la aplicación. 
+Se implementó la compra venta de teléfonos, la posibilidad de actualizar el precio de los productos que están ya a la venta y retirar del mercado. Además se implementó un nuevo modal que permite a los usuarios controlar todas estas funciones anteriores por teléfono y consultar el historial de precios y ventas previas.
+
+\imagen{anexos/sprint7}{Tareas finalizadas en el Sprint 7}
+
+En consecuencia, se produce el primer despliegue de la aplicación en \textit{Vercel} para comprobar su correcto funcionamiento una vez ya desplegada.
+
+\subsection{Sprint 8: Grandes Mejoras a nivel de \textit{UX} y nuevas características}
+
+En este sprint final transcurrido entre el 10-06-2023 y el 23-06-2023, se decide añadir a la aplicación la posibilidad de registrar imágenes de los teléfonos, ese añadido se realiza respetando las ventajas de \textit{Blockchain}. Por ello este sprint está focalizado principalmente en esta característica que requiere de la adaptación del contrato para poder registrar el CID y en la adaptación del \textit{frontend} para esta característica.
+
+\imagen{anexos/sprint81}{Tareas finalizadas en el Sprint 8 (Parte 1)}
+\imagen{anexos/sprint82}{Tareas finalizadas en el Sprint 8 (Parte 2)}
+
+Se mejora el funcionamiento del botón de la parte superior derecha que indica el estado de conexión de la aplicación con la \textit{wallet}, haciéndolo mucho más comprensible para el usuario, de esta forma ahora el usuario conoce en cualquier momento si tiene \textit{Metamask} instalado, si lo tiene pero debe iniciar sesión o si ya está conectado.
+
+Surgieron una serie de \textit{bugs}, principalmente estéticos por actualizar \textit{DaisyUi} a una nueva versión que había salido en Junio que tuvieron que ser resueltos y otros fallos menores.
+
+Finalmente, se realizaron mejoras para garantizar la seguridad de la aplicación, se creó un fichero \textit{.env} para garantizar la seguridad de las distintas \textit{API KEYS}, además estas claves fueron regeneradas. La aplicación se volvió a desplegar y se creo un repositorio paralelo al original en \textit{GitHub} para poder hacer público el proyecto.
+
+\section{Estudio de viabilidad}
+
+En esta sección se va a estudiar la viabilidad tanto económica como legal del proyecto, para ello, se va a hacer un repaso de las tecnologías empleadas para ver que costes conlleva y las licencias empleadas.
+
+\subsection{Viabilidad económica}
+En este apartado se estudiarán los costes económicos del proyecto y posibles formas de monetizar el desarrollo.
+
+\subsubsection{Costes del proyecto}
+
+En primer lugar vamos a considerar los costes del proyecto relacionados con el personal:
+
+\begin{itemize}
+    \item En total se han empleado alrededor de 250 horas para realizar el proyecto, entre realización de las tareas en sí e investigación, ello da una media de 14 horas a la semana.
+    \item Las principales tecnologías empleadas han sido \textit{Solidity} y \textit{React}, sus sueldos son respectivamente de 70.368 USD\footnote{United States Dolar} y 69.480 USD, para estimar un sueldo para nuestro desarrollador vamos a calcular la media de ambas para estimar un sueldo medio que quiera aceptar nuestro desarrollador, serán 69.924\$. Estos sueldos han sido extraídos de la encuesta anual de \textit{Stack Overflow}\cite{stackoverflowsurvey}. El sueldo bruto anual en euros será de 64.053 euros a la tasa de cambio actual por la que 1 USD son 0,92 euros. Esto nos daría como resultado unos 35 euros por hora brutos a 1820 horas de trabajo anuales (40 semanales).
+
+ $$ 14 \frac{horas}{ 1 semana}\times35 \frac{euros}{ 1 hora}\times4\frac{semanas}{ 1 mes}= 1960 euros\hspace{0.5em}al\hspace{0.5em}mes  $$
+
+\item A continuación, debemos pagar los impuestos para calcular el coste total del trabajador, datos extraídos de \cite{impuestosSS}:
+\begin{itemize}
+    \item FOGASA: 0,2\%
+    \item Desempleo: 5,5\%
+    \item Formación: 0,6\%
+    \item Contingencias: 23,6\%
+\end{itemize}
+
+$$\frac{1960\frac{euros}{ 1 mes}}{1-(0.002+0.055+0.006+0.236)}=2796\text{\euro}\hspace{0.5em}al\hspace{0.5em}mes$$
+\end{itemize}
+Además, se deben añadir los costes del equipo informático y su software:
+\begin{itemize}
+    \item  Un ordenador de sobremesa con un coste total de unos 2200 euros después diversas mejoras, aunque el original es de hace 7 años, actualmente tiene las siguientes características:
+    \begin{itemize}
+        \item Procesador: AMD Ryzen 5 5600X 6 núcleos.
+        \item Gráfica: Nvidia GTX 1070.
+        \item RAM: 16GB DDR4.
+        \item SSD: 750GB.
+        \item HD: 2Tb.
+    \end{itemize}
+$$\frac{2200\hspace{0.5em}euros}{7\hspace{0.5em}años}=314\hspace{0.5em}euros\hspace{0.5em}al\hspace{0.5em}año$$
+
+$$314euros\frac{4\hspace{0.5em} meses}{12\hspace{0.5em} meses}=104euros\hspace{0.5em}en\hspace{0.5em} total\hspace{0.5em} por\hspace{0.5em} hardware$$
+\item  De software solo se ha pagado Windows 10, hace 7 años también:
+    $$\frac{130\hspace{0.5em}euros}{7\hspace{0.5em}años}=19\hspace{0.5em}euros\hspace{0.5em}al\hspace{0.5em}año$$
+    $$19euros\frac{4\hspace{0.5em} meses}{12\hspace{0.5em} meses}=6.2euros\hspace{0.5em}en\hspace{0.5em} total\hspace{0.5em} por\hspace{0.5em} software$$
+\end{itemize}
+
+
+En consecuencia, podemos concluir que los costes totales del proyecto en estos cuatro meses han sido de:
+    \begin{itemize}
+        \item Personal: 11184 euros.
+        \item Hardware: 104 euros.
+        \item Software: 6,2 euros.
+        \item Otros (electricidad y conexión a Internet): 130 euros.
+    \end{itemize}
+
+En total suma unos 11424 euros.
+
+\subsubsection{Costes del proyecto}
+Actualmente este proyecto al no haber sido desplegado en la red principal y además al ser distribuido con licencia MIT no va a recaudar dinero. No obstante, si lo deseáramos, dispondríamos de las siguientes alternativas:
+    \begin{itemize}
+        \item Cobrar una tasa por transacción a nivel de contratos. El contrato enviaría esta tasa a la \textit{wallet} definida. Además, los usuarios podrían consultar el funcionamiento esta tasa a nivel de código.
+        \item De forma similar a la anterior, cobrar una tasa por usar el \textit{frontend}.
+        \item Proponer el proyecto como \textit{open source} y financiarlo mediante una campaña de \textit{crowdfunding}.
+    \end{itemize}
+
+\subsection{Viabilidad legal}
+
+\tablaSmall{Licencias empleadas en el proyecto}
+{l r r r}{licenses}
+{\textbf{Herramienta} & \textbf{Licencia}  \\}{
+  React & MIT  \\
+  Tailwinds css & MIT  \\
+  Daisy UI & MIT  \\
+  Solidity & GNU  \\
+  GIT & GNU \\
+  NFT.Storage & MIT y Apache License 2.0 \\
+  Truffle Suite & MIT \\
+  Web3.js & GNU \\
+  Vite & MIT \\
+  TypeScript & Apache License 2.0 \\
+  Metamask & Non-Commercial Use* \\
+  Node.js & MIT \\
+  Ethereum & GNU \\
+}
+
+Cómo se puede ver en la tabla \ref{tabla:licenses} todas las licencias permiten su uso para proyectos del tipo de Second Hand Chain de forma completamente libre.
+
+La única particularidad sería la de \textit{Metamask}, con cuya compañía se necesitaría llegar a un acuerdo para emplear su software en caso de que se usase para fines comerciales o se superase los 10000 usuarios mensuales, cifras que no vamos a alcanzar en ningún caso.
+
+
+
+

@@ -1,0 +1,218 @@
+\capitulo{3}{Conceptos teóricos}
+
+En el caso de este proyecto la gran característica es que almacena sus datos y lógica en \textit{Blockchain}, por ello en los siguientes apartados se explicará el funcionamiento lógico de estas redes para poder comprender cuáles son las grandes características que aportan a este proyecto, así como sus limitaciones. Además se explorará el funcionamiento de \textit{Ethereum}, una \textit{Blockchain} con unas características particulares que permite la ejecución de código.
+
+\section{Introducción a Blockchain}
+
+\textit{Blockchain} se puede definir como una estructura de datos formada por bloques que contienen transacciones y por sus características es extremadamente complejo y costoso editar transacciones ya realizadas. Esto es debido a que los datos están verificados por sus correspondientes \textit{hashes} y estos a su vez dependen de los hashes de bloques y datos anteriores.
+
+Los pioneros en idear un primer concepto similar a lo que son hoy en día las redes \textit{Blockchain} fueron Stuart Haber y W. Scott Stornetta\cite{haber1991time} que buscaban que las marcas de tiempo de los documentos no pudiesen ser modificadas garantizando la autenticidad de estos. Para ello emplearon un sistema que ya empleaba \textit{hashes} para garantizar la consistencia de los datos a lo largo de todo su historial de modificaciones.
+
+Satoshi Nakamoto, es considerado el \textit{padre} de \textit{Blockchain} tras la creación de \textit{Bitcoin} al publicar el primer artículo\cite{nakamoto2008bitcoin} con la idea de una \textit{Blockchain} moderna. En este trabajo se proponía un sistema descentralizado para gestionar transacciones monetarias sin la intervención de actores como bancos o reguladores que operan en el sistema bancario tradicional. 
+
+Este modelo, basado en \textit{proof-of-work} para mantener la coherencia entre los distintos nodos que conforman la red, permite el intercambio de \textit{token-es fungibles} como es la criptomoneda \textit{Bitcoin} pero no de activos más abstractos. 
+
+La siguiente gran evolución de \textit{Blockchain} fue llevada a cabo por Vitalik Buterin creador de \textit{Ethereum}. Su propuesta consistía en la capacidad de emplear código en \textit{Blockchain} como describe en el \textit{whitepaper} de \textit{Ethereum}\cite{buterin2014next}, esto permitirá la creación de conceptos tan importantes como smart contrct, NFT o dApp.
+
+La tecnología \textit{Blockchain} ha evolucionado de forma muy veloz y pese a que la creación de estas dos redes es relativamente reciente ya existen gran cantidad de proyectos alternativos que ofrecen diferentes características a los usuarios, como pueden ser \textit{Filecoin, Monero, ZCash...}
+
+\section{Funcionamiento de Blockchain}
+
+En esta sección se va a comentar el funcionamiento de una \textit{Blockchain}. Para ello, se profundizará en el funcionamiento de las estructuras de datos que implementan esta tecnología.
+
+\subsection{\textit{Hash}}
+Un \textit{hash} es el resultado obtenido de una función llamada función \textit{hash} la cual recibe una entrada y la transforma en una cadena  resultado de una longitud fija independientemente del contenido de la entrada. Un \textit{hash} será igual a otro sí y solo sí los datos aportados a la función son los mismos en un caso y en otro\cite{enwiki:1158312728}.
+
+Se denomina colisión a que se aporte una entrada distinta a otra y se obtenga el mismo \textit{hash}. Normalmente esto es muy poco frecuente en las funciones \textit{hash} más utilizadas hoy en día, además estas funciones deben ser capaces de calcular el \textit{hash} para una entrada de forma muy veloz.
+
+Las funciones mas empleadas actualmente son las SHA, un estándar propuesto por el NIST\footnote{National Institute of Standards and Technology, US Department of Commerce} \cite{nistSHA}, entidad perteneciente al gobierno de Estados Unidos. Por ejemplo, \textit{Bitcoin} emplea SHA-256.
+
+
+\subsection{Merkle Tree}
+Para estas redes fue clave la invención del \textit{Merkle Tree} \cite{merkle1982method}, un árbol que se emplea para poder obtener un hash único de un conjunto de datos, como se puede ver en la figura \ref{fig:Hash_Tree}.
+
+\imagen{Hash_Tree}{Merkle Tree\cite{eswiki:140708495}}{.9}
+
+
+En este caso tenemos cuatro conjuntos de datos (L1, L2, L3, L4) los cuales componen el conjunto de nodos hoja del árbol, el nodo raíz es el nodo que contiene el \textit{hash} completo del conjunto total.
+El funcionamiento consiste en que se calculan los \textit{hash} de los datos, representados en los nodos inmediatamente superiores a los hoja.
+
+Estos \textit{hash} se van combinado y se calculan los \textit{hashes} de \textit{hashes} hasta llegar al nodo raíz, el cual contiene un \textit{hash} que nos permite verificar rápidamente la coherencia de todos los \textit{hash} del árbol, ya que al cambiar cualquier dato este \textit{hash} no coincidiría con el previo. 
+
+Esta estructura de datos permite la verificación de los datos. En cuanto a complejidad algorítmica podemos considerar que en este caso, similar al de un árbol binario,  va a ser para la búsqueda, inserción y borrado:
+
+$\mathcal{O}(\log{}n)$
+
+Mientras que la complejidad espacial será de:
+
+$\mathcal{O}(n)$
+
+\subsection{Criptografía Asimétrica}
+Las \textit{Blockchain} modernas hacen uso de este sistema para encriptar la información constantemente, por ejemplo, nuestra \textit{wallet} de \textit{Metamask}, necesaria para poder emplear Second Hand Chain está definida por la clave pública y, aunque podamos no ser conscientes, por una clave privada.
+
+\imagen{MMpukprk}{Ejemplo de clave pública y clave privada en una de las \textit{wallet} empleadas para crear Second Hand Chain}{0.5}
+
+Este tipo de encriptación hace uso de dos claves distintas \cite{enwiki:1162152127}:
+\begin{itemize}
+\item \textbf{Clave pública}: Esta clave es de dominio público, el propietario la distribuye al público. Permite leer los mensajes encriptados con la clave privada.
+\item \textbf{Clave privada}: Esta clave solamente pertenece al dueño y no debe hacerse pública bajo ningún concepto.
+\end{itemize}
+
+Por lo tanto podemos concluir que:
+
+\begin{itemize}
+ \item Los mensajes encriptados con la clave pública solamente podrán ser desencriptados por el propietario de la clave privada.
+ \item Los mensajes encriptados con la clave privada solamente podrán ser desencriptados mediante la clave pública y este hecho garantiza que quien lo ha encriptado es el propietario de la clave privada.
+
+\end{itemize}
+\subsection{Coherencia entre bloques}
+En este apartado se va a detallar el funcionamiento entre bloques para poder mantener la coherencia y la inmutabilidad. Para ello nos basaremos en una \textit{Blockchain} que sería similar a \textit{Bitcoin} dado que solo sería capaz de registrar transacciones monetarias. A continuación se adjunta una imagen que nos permitirá visualizar mejor este funcionamiento.
+
+\imagen{dosBloques}{Ejemplo de bloques en una \textit{Blockchain}. Extraido de \cite{githubGitHubAnders94blockchaindemo}}{0.9}
+
+Si nos fijamos en fig.\ref{fig:dosBloques} podemos observar dos bloques pertenecientes a una \textit{Blockchain} en los cuales podemos apreciar los siguientes campos:
+\begin{itemize}
+\item \textbf{Bloque}: Representa el número de ese bloque, en la figura son 4 y 5.
+\item \textbf{\textit{Nonce}}: Es un término muy empleado en el ámbito de la criptografía, básicamente será un numero cualquiera que se utilizara para ciertas operaciones criptográficas como veremos en este caso.
+\item \textbf{\textit{Tx}}: Hace referencia a las transacciones, en este caso fig.\ref{fig:dosBloques} podemos ver que son transacciones económicas entre diferentes personas.
+\item \textbf{Anterior}: Representa el hash del bloque anterior, podemos ver que el anterior del bloque cinco se corresponde con el hash del bloque 4.
+\end{itemize}
+
+El proceso para construir la \textit{Blockchain} será el siguiente:
+\begin{enumerate}
+\item Después de tener una suficiente cantidad de transacciones, este dato varía dependiendo de la \textit{Blockchain} concreta y a veces es incluso dinámico dentro de estas. Se procede a construir el bloque.
+\item Para ello se calcula el hash de la combinación de todos los datos en su interior (Anterior, Tx, Nonce e Id).
+\item El siguiente paso sería firmar el bloque, esta operación en este ejemplo, consistiría en cambiar el nonce hasta obtener un hash que empiece por cuatro ceros, algo que podemos ver que hay en común entre los distintos hashes, resolver este problema se denomina minar.
+\item Una vez firmado el bloque es válido para añadirse al resto de la \textit{Blockchain}, de esta forma se garantiza la autenticidad y la inmutabilidad de tanto los datos de este bloque como los anteriores.
+\end{enumerate}
+
+El proceso de minado, por ejemplo en \textit{Bitcoin}, consiste en que el valor del \textit{hash} sea menor a uno llamado \textit{target} que se decide en común entre todos los diferentes nodos que componen la \textit{Blockchain}. Además este valor se va actualizando cada cierto tiempo, de forma que se mantiene la estabilidad de la red al recalcularse la dificultad del problema a resolver cada cierto tiempo. De esta forma se puede garantizar que el tiempo que llevará en firmarse un bloque en \textit{Bitcoin} será siempre similar.
+
+Por ello es muy complicado introducir cambios maliciosos ya que intentar editar un dato previo nos llevaría a tener que minar de nuevo todos los bloques creados desde entonces, lo cual es extremadamente costoso.
+
+\subsubsection{Firma de la transacción}
+
+Como hemos visto anteriormente los datos en un bloque van a consistir en transacciones, el problema es que tal y como está en la fig.\ref{fig:dosBloques} no tenemos ninguna forma de garantizar que esas transacciones son realizadas por el propietario de ese dinero. 
+
+Para resolver este problema se emplea un sistema de clave pública, clave privada. Los emisarios y receptores de la transacción van a ser claves públicas y, además de la transacción, se va a añadir la firma que nos permite, empleando la clave pública verificar que la transacción y la firma sean las mismas después de desencriptarlas. De esta forma garantizamos que el emisario del mensaje es el poseedor de la clave pública.
+
+\subsection{Coherencia y honestidad entre nodos}
+
+
+Un nodo es básicamente un ordenador que dispone de la \textit{Blockchain} y ejecuta un software que garantiza el consenso con el resto de miembros de la red.
+
+\subsubsection{Problema de los generales Bizantinos}
+Este problema\cite{eswiki:142632281} consiste en que existe un conjunto de ejércitos que para poder conquistar una ciudad deben actuar de forma sincronizada , ya que existen dos movimientos posibles de los ejércitos en el teatro de operaciones:
+\begin{itemize}
+    \item \textbf{\textit{Ataque}}
+    \item \textbf{\textit{Retirada}}
+\end{itemize}
+
+Además existen dos graduaciones militares:
+\begin{itemize}
+    \item \textbf{\textit{Comandante}}: Solo hay uno y es el encargado de dar la orden final.
+    \item \textbf{\textit{Teniente}}: Son los encargados de transmitir la orden del comandante y hay varios.
+\end{itemize}
+
+El problema es que hay tenientes traidores y leales, unos transmitirán la orden de forma correcta y otros no.
+
+Este problema aplicado a \textit{Blockchain} nos lleva a relacionar los nodos con los tenientes y a la ciudad con el bloque. Los mecanismos de consenso que hay a continuación son los responsables de resolver este problema al hacer pública la decisión de cada nodo y tomar finalmente la decisión mayoritaria.
+
+\subsubsection{Protocolos de consenso}
+Esta red distribuida va a depender de que los diferentes nodos actúen de forma honesta. Para ello existen diferentes protocolos, siendo los dos más conocidos:
+    \begin{itemize}
+        \item \textbf{\textit{Proof of Stake}}\cite{eswiki:151478126}: Se traduciría como prueba de apuesta. Para ser un nodo validador en la red tienes que depositar una determinada cantidad de \textit{tokenes}, por ejemplo en \textit{Ethereum}el mínimo son 32ETH, el equivalente a 60.734 USD, si aportas más tienes más posibilidades de generar bloque, lo cual se recompensa. 
+        Este sistema se basa en que si posees gran cantidad de tokens no vas a querer mentir y estropear el consenso entre los distintos nodos de la \textit{Blockchain} ya que estarías perdiendo una gran cantidad de dinero.
+        \item \textbf{\textit{Proof of Work}}\cite{eswiki:151281808}: Se traduciría como prueba de trabajo, el trabajo a realizar es el problema explicado  en el caso de \textit{Bitcoin} (calcular un \textit{nonce} válido para firmar el bloque), es muy costoso computacionalmente, y en cierta medida el minero que obtiene el bloque, y por tanto la recompensa, lo hace por suerte. Por ello, el resto de nodos van a aceptar el añadir ese bloque, ya que para aceptar otro tendría que aparecer una solución con un valor menor. No aceptarlo, es indicador de que no eres un nodo honesto, ya que como minero tu objetivo va a ser ir a por otro bloque y conseguir la recompensa.
+    \end{itemize}
+
+Por lo tanto podemos concluir que la estabilidad de estos protocolos va a depender de que exista una gran cantidad de nodos, para que los nodos maliciosos nunca sean mayoría en relación a los que son honestos.
+
+\section{\textit{Ethereum}}
+Esta \textit{Blockchain}\cite{ethereumIntroduccinEthereum} permite la ejecución de código en \textit{Blockchain} de forma mucho más compleja que las que había hasta el momento de su creación. Para ello emplea la EVM\footnote{Ethereum Virtual Machine}.
+
+La criptomoneda de esta \textit{Blockchain} es el ETH\footnote{Ether} y pese a que la gran innovación de esta \textit{Blockchain} respecto a las anteriores es la posibilidad de gestionar una gran cantidad de activos, es necesario seguir manteniendo una criptomoneda nativa para poder gestionar el pago de \textit{gas fees} o recompensar a los mineros.
+
+
+\subsection{\textit{Smart Contracts} y \textit{Dapp}}
+La gran diferencia respecto a las \textit{Blockchains} previas es que permite subir los denominados \textit{smart contracts}, que básicamente son programas que quedan subidos y los diferentes usuarios pueden llamar a sus funciones según deseen.
+
+En \textit{Ethereum} se emplea el lenguaje \textit{Solidity} para programar \textit{Smart Contracts}, estos suelen formar parte de una \textit{Dapp} para la cual actuarían como si se tratase de un \textit{backend} para un aplicación web tradicional o \textit{web2}.
+
+\subsection{\textit{Web3}}
+Otro concepto nuevo al que abre las puertas \textit{Ethereum} es \textit{web3}\cite{ethereumWeb2Web3} que basándose en las características de \textit{Blockchain} pretende aportar las siguiente mejoras a \textit{web2}:
+\begin{itemize}
+    \item Los datos no pueden ser alterados, o es extremadamente complicado.
+    \item Que el acceso a los datos sea libre.
+    \item El acceso a los datos no puede ser censurado por nadie.
+    \item Los pagos son en criptomonedas, haciendo innecesaria la intervención de terceros como bancos.
+\end{itemize}
+
+Sin embargo, existen también desventajas:
+\begin{itemize}
+    \item Mayor coste, solamente desplegar unos \textit{Smart Contracts} como los que forman Second Hand Chain en la \textit{mainnet} de \textit{Ethereum} puede tener un coste de cientos a miles de euros.
+    \item Mayores dificultades para hacer el \textit{frontend} de la aplicación, en el caso de este proyecto, ya es mas complicado al tener que integrar \textit{Metamask}.
+    \item Los mayoría de usuarios no están acostumbrados al funcionamiento de \textit{web3} y hay conceptos complejos de entender para el usuario estándar sin conocimientos de criptografía o algoritmos, lo cual lleva a que sea más fácil cometer estafas para delincuentes.
+\end{itemize}
+
+\subsection{\textit{Gas Fees}}
+
+Para poder recompensar a los nodos, por cada transacción los usuarios deben pagar unas \textit{gas fees}\cite{ethereumFeesEthereumorg} que se podrían extrapolar a el pago de impuestos para poder mantener la \textit{Blockchain} operativa.
+
+Además incentiva a los usuarios a solamente subir \textit{smart contracts} que funcionen bien, evitando la subida de código incorrecto o con errores.
+
+La unidad que se emplea para el cálculo de \textit{gas fees} en \textit{Ethereum} es el \textit{gwei}
+que es una unidad del \textit{Ether}.
+
+\tablaSmall
+{Submúltiplos del \textit{Ether}}
+{p{0.2\textwidth} p{0.4\textwidth}}
+{unidadesEther}
+{Unidad & Valor en Wei\\}
+{
+  \textit{Wei} & $10^{0}$ \textit{Wei}  \\
+  \textit{Kwei} & $10^{3}$ \textit{Wei}  \\
+  \textit{Mwei} & $10^{6}$ \textit{Wei}  \\
+  \textit{Gwei} & $10^{9}$ \textit{Wei}\\
+  \textit{Szabo} & $10^{12}$ \textit{Wei}  \\
+  \textit{Finney} & $10^{15}$ \textit{Wei}  \\
+  \textit{Ether} & $10^{18}$ \textit{Wei} \\
+}
+
+ Podemos ver las tres unidades más empleadas en la Tabla \ref{tabla:unidadesEther} los cuales son:
+ \begin{itemize}
+ \item \textit{Wei}: Es la unidad más pequeña y los contratos que guardan precios, como los de Second Hand Chain, los guardan en esta unidad.
+ \item \textit{Gwei}: Es la unidad empleada para calcular los \textit{gas fees} de una transacción.
+ \item \textit{Ether}: Es la unidad estándar para decir los precios de un bien en esta divisa. En Second Hand Chain, pese a guardarlos en \textit{Wei}, todos son mostrados en el \textit{frontend} en \textit{Ether}.
+ 
+ \end{itemize}
+
+\imagen{gas-tx}{Diagrama de funcionamiento de las \textit{gas fees} para una transacción. Extraído de: \cite{ethereumFeesEthereumorg}}{0.9}
+
+Cuando se solicita realizar una transacción, se nos va retirar de la \textit{wallet} el importe que lleve aparejado esa transferencia y además los \textit{gas fees}, los cuales van a calcularse de la siguiente forma:
+
+\begin{enumerate}
+    \item El valor va a depender directamente del bloque en el que se inserte la transacción, cada uno lleva aparejado un valor que cambia dinámicamente dependiendo de la carga de transacciones del bloque anterior. Este valor se denomina \textit{baseFeePerGas} y se va a quemar, es decir, no se lo lleva nadie, ni el minero del bloque.
+    \item Además vamos a necesitar pagar al minero con lo que se denomina \textit{maxPriorityFeePerGas} , por lo que este valor tendrá que ser de al menos 1\textit{Wei}, normalmente será muy superior a eso para que a este le compense añadir nuestra transacción al bloque. El \textit{maxPriorityFeePerGas} se lo quedará el minero (el nodo agraciado con el bloque).
+    \item El coste final total será la suma de estos dos valores (\textit{maxPriorityFeePerGas} y  \textit{baseFeePerGas}) multiplicado por el coste de la transacción a realizar, todo ello empleando la unidad \textit{Gwei}.
+\end{enumerate}
+
+\imagen{exampleGFees}{Costes de \textit{gas fees} para un bloque real de \textit{Ethereum Sepolia}. Extraído de \cite{etherscanSepoliaBlocks}.}{0.9}
+
+En la figura \ref{fig:exampleGFees} podemos ver todos los conceptos anteriores en un entorno real en la \textit{testnet Sepolia} de \textit{Ethereum}. En este caso se está representando los datos obtenidos de un bloque ya minado. Podemos destacar:
+ \begin{itemize}
+ \item \textit{Fee Recipient}: La cuenta a la que se transfieren todas estas tarifas hasta que el bloque sea minado.
+ \item \textit{Block Reward}: Recompensa al minero del bloque.
+ \item \textit{Size}: El tamaño en bytes del bloque
+ \item \textit{Gas Used}: El máximo de gas dispuesto a pagar por una transacción.
+ \item \textit{Base Fee Per Gas}: Es concepto descrito anteriormente.
+ \item \textit{Burnt Fees}: Valor total del conjunto de \textit{gas fees} que se quema.
+ \end{itemize}
+
+ \section{\textit{IPFS} y \textit{Filecoin}}
+
+ \textit{IPFS}\cite{ipfsWhatIPFS} es una red distribuida enfocada en el almacenamiento de datos. Se basa en el concepto de tabla \textit{hash} distribuida, de forma que en vez de guardar los datos en una ruta predefinida, esta ruta va a ser el \textit{hash} de esos datos, haciendo que estos datos no puedan ser editados, ya que cambiaría el \textit{hash} y por tanto su dirección (recordemos el concepto de Merkle Tree o Hash Tree). Este \textit{hash} completo se denomina CID y en este trabajo se emplea en el guardado y lectura de las imágenes (o gifs) de teléfonos a través de un servicio basado en esta tecnología y en Filecoin. El problema de IPFS es que necesita que se guarden los accesos a los \textit{hashes} en un nodo que participe en la red y además los datos no permanecen ya que no se ofrece incentivo a los nodos.
+
+ \textit Por esta razón se hace necesario emplear una \textit{Blockchain} como {Filecoin}\cite{filecoinOverview} está basado en \textit{IPFS}, con la diferencia que que implementa una blockchain y recompensa a los nodos por almacenar información, pero de forma que reciben más recompensa al guardar información durante más tiempo, asegurando que van a seguir prestando su servicio.
+
+ En Second Hand Chain se emplea un servicio llamado \textit{NFT.Storage}\cite{nftNFTStorageFree} que hace uso de estas dos tecnologías para resolver el problema de los grandes costes de \textit{Ethereum} a la hora de guardar imágenes o otros archivos con mayor tamaño.

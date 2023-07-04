@@ -1,0 +1,367 @@
+\apendice{Documentación técnica de programación}
+
+\section{Introducción}
+En primer lugar me gustaría destacar que esta aplicación está completamente desplegada y se puede acceder a ella desde \url{https://second-hand-chain.vercel.app/} donde se pueden verificar todas sus funcionalidades. 
+
+Por ello, para utilizar esta aplicación no es necesario instalar nada (excepto la extensión de \textit{Metamask} en tu navegador).
+
+En este apéndice se va a dar toda la información necesaria al programador para poder configurar la aplicación y sus entornos de desarrollo.
+
+\section{Estructura de directorios}
+
+\begin{itemize}
+    \item \textit{documentation}: Documentación.
+    \item \textit{Models UML}: Carpeta con los diagramas de la aplicación.
+    \item \textit{Truffle}: Contratos Inteligentes.
+        \begin{itemize}
+            \item \textit{Build/contracts}: ABI\footnote{Interfaz Binaria de Aplicación} de  los contratos.
+            \item \textit{contracts}: código de los contratos.
+            \item \textit{test}: carpeta creada por defecto para posibles tests .
+        \end{itemize}
+    \item \textit{frontend/second-hand-chain}: Provecto de \textit{React TypeScript}
+            \begin{itemize}
+            \item \textit{dist}: Ficheros y videos en el proyecto compilado.
+            \item \textit{node\_modules}: node y librerias.
+            \item \textit{src}: código.
+                \begin{itemize}
+                    \item \textit{componentes}: Componentes de \textit{React}.
+                    \item \textit{hooks}: \textit{Custom hooks} empleados.
+                    \item \textit{services}: Servicios a llamar desde los componentes.
+                \end{itemize}
+        \end{itemize}
+\end{itemize}
+
+\section{Manual del programador}
+A continuación se explica el software que es necesario instalar para ejecutar la aplicación:
+\subsection{Instalar\textit{Node.js}}
+Es necesario instalar la versión v16.14.0 de \textit{Node.js}. Es importante que sea esta versión ya que la mayoría de este proyecto depende de este \textit{software}.
+
+Por otro lado cuenta con la ventaja de ser una versión LTS\footnote{Long term service} para la cual se va a ofrecer soporte durante más tiempo de para otras.
+
+Podemos descargar este software desde su web oficial: 
+\url{https://nodejs.dev/en/}.
+
+\subsection{Instalar \textit{Truffle}}
+
+Este entorno de desarrollo para contratos inteligentes nos permitirá crear proyectos de \textit{Truffle} e interactuar con ellos.
+
+Para ello emplearemos el comando: \texttt{npm install -g truffle}.
+
+Además instalaremos  \textit{Ganache} con: \texttt{npm i ganache-cli}
+
+Esta versión de \textit{Ganache} es solamente para consola aunque a mí personalmente me ha parecido más cómoda que la que cuenta con interfaz.
+
+\section{Compilación, instalación y ejecución del proyecto}
+
+\subsection{Obtener claves para  \textit{Alchemy} y \textit{NFT.Storage}}
+Para poder ejecutar el proyecto una vez desplegado en \textit{Blockchain} vamos a necesitar las siguientes \textit{API KEYS}:
+
+\begin{itemize}
+    \item \textit{Alchemy}: Podemos obtenerla mediante el registro en su web y creando un proyecto, sección en la que nos aparecerá la clave y el \textit{endpoint}. Enlace: https: \url{//docs.alchemy.com/docs/alchemy-quickstart-guide\#1key-create-an-alchemy-key}.
+    \item \textit{Nft.Storage}:Deberemos obtener otra clave para este servicio, para lo cual también es necesario el registro. Enlace: \url{https://nft.storage/docs/}.
+\end{itemize}
+
+\subsection{Configurar el \textit{.env}}
+En los directorios con el \textit{frontend} podemos comprobar que tenemos un fichero llamado \textit{.env.example}, este fichero contiene el nombre exacto de las variables a ser igualadas con las \textit{API KEYS} obtenidas en la sección anterior. Para ello:
+\begin{itemize}
+    \item Copiar y pegar dicho fichero en el mismo directorio.
+    \item La copia renombrarla a \textit{.env}.
+    \item Ahora registra las \textit{API KEYS} en ese fichero.
+    \item Si tienes un despliegue de los contratos copiar también la dirección del contrato a su variable.
+\end{itemize}
+
+\subsection{Instalación de librerías de \textit{Javascript} en los proyectos de \textit{Truffle} y \textit{React}}
+Para realizar este paso debemos entrar en el directorio raíz de cada uno de los proyectos y ejecutar: \texttt{npm install}.
+
+Con este comando instalamos todas las librerías de golpe con sus versiones ya configuradas, ya que están definidas en los ficheros de dependencias\footnote{package.json}.
+
+A continuación, para ejecutar el proyecto de \textit{React} deberemos ejecutar en consola: \texttt{npm run dev}.
+
+Tras ello nos aparecerá un enlace en la consola con la dirección local en la que se está ejecutando. No hay que hacer nada más ya que a cada cambio en este proyecto se recompila automáticamente añadiendo solamente el código que ha cambiado gracias a \textit{Vite}.
+
+\subsection{Desplegar el contrato en \textit{Sepolia}}
+\begin{itemize}
+    \item Descargar el  fichero \textit{truffle-config.js} de uno de los \textit{commits} anteriores a añadirlo a \textit{.gitIgnore}.
+    \item Deberemos configurar el fichero \textit{truffle-config.js} siguiendo el formato en la figura \ref{fig:deployment}.
+    \item Introducir nuestra clave privada de una \textit{wallet} con suficiente \textit{Ether} donde se indica en la figura \ref{fig:deployment}.
+    \item Introducir la \textit{API KEY} de \textit{Alchemy}.
+    \item Ejecutar: \texttt{truffle migrate --network sepolia}.
+    \item En la salida se esta última ejecución aparece la dirección del contrato, pegarla en su campo correspondiente del fichero \textit{.env}.
+\end{itemize}
+
+\imagen{deployment}{Configuración de \textit{truffle-config.js} para despliegue en \textit{Sepolia}}
+
+\section{Pruebas del sistema}
+Se ha realizado una serie de pruebas manuales a lo largo del desarrollo de la aplicación para verificar que se cumplen en todo momento los requisitos establecidos.
+
+Se han diseñado estas pruebas para conseguir el mayor porcentaje posible de recubrimiento de código. A continuación se listan cada uno de los casos de prueba testados:
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-1}    & \textbf{Inicio de Sesión en \textit{Metamask} correcto}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario iniciará sesión en  \textit{Metamask} correctamente \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Le aparece una ventana para iniciar sesión en \textit{Metamask}.
+                \item Introduce su contraseña.
+                \item Puede consultar sus teléfonos en propiedad.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-1 Inicio de Sesión en \textit{Metamask} correcto.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-2}    & \textbf{Inicio de Sesión en \textit{Metamask} pero cierra la ventana antes}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario accederá a la web, cerrará la ventana de \textit{Metamask} y accederá desde la extensión del navegador. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Le aparece una ventana para iniciar sesión en \textit{Metamask}.
+                \item Cierra la Ventana.
+                \item Le aparece un mensaje diciéndole que acceda desde la extensión del navegador en el botón derecho de la \textit{NavBar}.
+                \item Accede a la extensión del navegador de \textit{Metamask}.
+                \item Introduce su contraseña.
+                \item Su cuenta aparece en el botón.
+                \item Puede consultar sus teléfonos en propiedad.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-2 Inicio de Sesión en \textit{Metamask} pero cierra la ventana antes.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-3}    & \textbf{Usuarios sin \textit{Metamask}}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario accederá a la web, sin la extensión instalada, podrá consultar datos pero no operar. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Le aparece un mensaje diciéndole que instale \textit{Metamask}.
+                \item Accede a consultar los teléfonos en venta.
+                \item Selecciona uno.
+                \item Le aparece un mensaje en el botón de compra diciendole que inicie sesión en \textit{Metamask}.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-3 Usuarios sin \textit{Metamask}.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-4}    & \textbf{Creación correcta de teléfono}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario, con la cuenta de \textit{Metamask} ya configurada  registrará correctamente un teléfono. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Hace clic en crear teléfono.
+                \item Introduce todos los datos correctamente, incluyendo la imagen que selecciona de su dispositivo.
+                \item Hace clic en crear.
+                \item Firma correctamente la transacción en \textit{Metamask}.
+                \item Le aparece un mensaje con un enlace a Etherscan.
+                \item Accede satisfactoriamente a \textit{Etherscan} para seguir el estado de su transacción.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-4 Creación correcta de teléfono.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-5}    & \textbf{Creación incorrecta de teléfono por datos incompletos}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario, con la cuenta de \textit{Metamask} ya configurada  intentará registrar un teléfono sin haber introducido todos los datos necesarios. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Hace clic en crear teléfono.
+                \item Introduce todos los datos excepto uno que no completa.
+                \item Hace clic en crear.
+                \item Le aparece un mensaje avisando de que tiene datos incompletos.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-5 Creación incorrecta de teléfono por datos incompletos.}
+\end{table}
+
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-6}    & \textbf{Creación incorrecta de teléfono por IMEI ya registrado}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario, con la cuenta de \textit{Metamask} ya configurada,  intentará registrar un teléfono previamente registrado. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Hace clic en crear teléfono.
+                \item Introduce todos los datos, pero el IMEI pertenece a otro teléfono ya registrado.
+                \item Hace clic en crear.
+                \item Le aparece un mensaje avisando de que ese IMEI ya existe en el contrato.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-6 Creación incorrecta de teléfono por IMEI ya registrado.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-7}    & \textbf{Puesta a la venta correcta de teléfono}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba, con la cuenta de \textit{Metamask} ya configurada, el usuario pondrá a la venta un teléfono de su propiedad correctamente. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Hace clic en teléfonos en propiedad.
+                \item Selecciona uno.
+                \item Introduce el precio.
+                \item Hace clic en poner a la venta.
+                \item Firma correctamente la transacción en \textit{Metamask}.
+                \item Le aparece un mensaje con un enlace a \textit{Etherscan}.
+                \item Accede satisfactoriamente a \textit{Etherscan} para seguir el estado de su transacción.
+                \item Espera a que la transacción se confirme.
+                \item Accede a teléfonos en venta y puede ver el teléfono a la venta.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-7 Puesta a la venta correcta de teléfono.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-8}    & \textbf{Retirada de la venta correcta de teléfono}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario, con la cuenta de \textit{Metamask} ya configurada, retirará un teléfono de la venta. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Hace clic en teléfonos en propiedad.
+                \item Selecciona uno que este a la venta.
+                \item Hace clic en retirar de la venta.
+                \item Firma correctamente la transacción en \textit{Metamask}.
+                \item Le aparece un mensaje con un enlace a \textit{Etherscan}.
+                \item Accede satisfactoriamente a \textit{Etherscan} para seguir el estado de su transacción.
+                \item Espera a que la transacción se confirme.
+                \item Accede a teléfonos en venta y puede ver el teléfono no se puede encontrar.
+                \item Accede a teléfonos en propiedad
+                \item Selecciona ese teléfono.
+                \item No aparece la opción de retirar de la venta.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-8 Retirada de la venta correcta de teléfono.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-9}    & \textbf{Cambio de precio de teléfono a la venta}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario, con la cuenta de \textit{Metamask} ya configurada, cambiará el precio de un teléfono la venta. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Hace clic en teléfonos en propiedad.
+                \item Selecciona uno que esté a la venta.
+                \item Escribe un nuevo precio.
+                \item Hace clic en cambiar precio.
+                \item Firma correctamente la transacción en \textit{Metamask}.
+                \item Le aparece un mensaje con un enlace a \textit{Etherscan}.
+                \item Accede satisfactoriamente a \textit{Etherscan} para seguir el estado de su transacción.
+                \item Espera a que la transacción se confirme.
+                \item Accede a teléfonos en venta y puede ver el teléfono con su nuevo precio.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-9 Cambio de precio de teléfono.}
+\end{table}
+
+\begin{table}[p]
+	\centering
+	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+		\toprule
+		\textbf{CP-10}    & \textbf{Compra de Teléfono}\\
+		\toprule
+		\textbf{Autor}                & Áxel Rubio González \\
+		\textbf{Descripción}          & En este caso de prueba el usuario, con la cuenta de \textit{Metamask} ya configurada, comprará un teléfono. \\
+		\textbf{Pasos}             &
+		\begin{enumerate}
+			\def\labelenumi{\arabic{enumi}.}
+			\tightlist
+			\item El usuario accede a la web de Second Hand Chain.
+                \item Hace clic en teléfonos a la venta.
+                \item Selecciona uno que esté a la venta.
+                \item Hace clic en comprar.
+                \item Firma correctamente la transacción en \textit{Metamask}.
+                \item Le aparece un mensaje con un enlace a \textit{Etherscan}.
+                \item Accede satisfactoriamente a \textit{Etherscan} para seguir el estado de su transacción.
+                \item Espera a que la transacción se confirme.
+                \item Accede a teléfonos en propiedad y puede ver el teléfono recién adquirido.
+		\end{enumerate}\\
+		\textbf{Estado}          & Correcto \\
+		\bottomrule
+	\end{tabularx}
+	\caption{CP-10 Compra de Teléfono.}
+\end{table}
+
